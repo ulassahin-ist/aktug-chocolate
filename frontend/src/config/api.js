@@ -8,11 +8,11 @@ import axios from "axios";
 const isDev = import.meta.env.DEV;
 export const API_BASE = isDev
   ? "http://localhost:5000" // ✅ Local development
-  : "http://84.247.20.171:5000"; // ✅ Production
+  : import.meta.env.VITE_API_BASE || "http://84.247.20.171:5000"; // ✅ Production
 
-// 🔹 API client uses RELATIVE URLs (Vite proxy will forward to backend)
+// 🔹 API client uses RELATIVE URLs in dev, ABSOLUTE in production
 const api = axios.create({
-  baseURL: "/api", // ✅ Relative - Vite proxy handles this
+  baseURL: isDev ? "/api" : API_BASE, // ✅ Dev: proxy | Prod: direct
 });
 
 // 🔹 Add token to every request
