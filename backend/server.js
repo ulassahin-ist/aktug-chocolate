@@ -1,4 +1,6 @@
-// server.js
+// ============================================
+// backend/server.js
+// ============================================
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -7,14 +9,20 @@ const { initDb } = require("./config/dbInit");
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ✅ CORS - Allow frontend origin
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://84.247.20.171"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
-// Static files (uploaded images)
+// ✅ Serve static uploads BEFORE routes (no /api prefix)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
+// ✅ Mount API routes
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/orders");
 const menuRoutes = require("./routes/menu");
@@ -29,26 +37,29 @@ app.use("/categories", categoryRoutes);
 app.use("/stats", statsRoutes);
 app.use("/branches", branchRoutes);
 
-// Simple health check
+// ✅ Health check
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
-// Start
 const PORT = process.env.PORT || 5000;
 
 (async () => {
   try {
-    await initDb(); // ⬅️ ensures DB + tables + seeds, and creates pool
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    await initDb();
+    app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
   } catch (err) {
-    console.error("Failed to start server:", err);
+    console.error("❌ Failed to start server:", err);
     process.exit(1);
   }
 })();
 
-process.on("unhandledRejection", (err) => {
-  console.error("UNHANDLED REJECTION:", err);
-});
-process.on("uncaughtException", (err) => {
-  console.error("UNCAUGHT EXCEPTION:", err);
-  process.exit(1);
-});
+// ============================================
+// URL Structure:
+// ============================================
+//
+// API routes:
+// http://84.247.20.171:5000/menu         ← GET menu items
+// http://84.247.20.171:5000/orders       ← POST create order
+// http://84.247.20.171:5000/auth/login   ← POST login
+//
+// Static files:
+// http://84.247.20.171:5000/uploads/menu_1.jpg  ← Images
