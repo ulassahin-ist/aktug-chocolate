@@ -227,7 +227,7 @@ const deleteItem = async (id) => {
   try {
     const branchId = getBranchId();
 
-    await api.delete(`//menu/${id}`, {
+    await api.delete(`/menu/${id}`, {
       params: { branchId },
     });
 

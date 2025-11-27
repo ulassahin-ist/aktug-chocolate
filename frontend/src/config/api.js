@@ -1,21 +1,15 @@
-// ============================================
 // frontend/src/config/api.js
-// ============================================
 import axios from "axios";
 
-// 🔹 Backend base URL - ONLY for static assets (images, uploads)
-// Use localhost in development, server IP in production
-const isDev = import.meta.env.DEV;
-export const API_BASE = isDev
-  ? "http://localhost:5000" // ✅ Local development
-  : import.meta.env.VITE_API_BASE || "http://84.247.20.171:5000"; // ✅ Production
-
-// 🔹 API client uses RELATIVE URLs in dev, ABSOLUTE in production
+// ✅ ALWAYS use relative /api path (works in both dev and prod with Nginx proxy)
 const api = axios.create({
-  baseURL: isDev ? "/api" : API_BASE, // ✅ Dev: proxy | Prod: direct
+  baseURL: "/api",
 });
 
-// 🔹 Add token to every request
+// ✅ For images only, use relative path (Nginx serves them)
+export const API_BASE = ""; // Empty = same domain
+
+// Add token to requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -24,7 +18,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 🔹 Handle auth errors
+// Handle auth errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -36,13 +30,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// ============================================
-// Usage Examples:
-// ============================================
-//
-// API calls (relative):
-// await api.get("/menu")  → Vite proxy → http://84.247.20.171:5000/api/menu
-//
-// Images (absolute):
-// <img :src="API_BASE + item.photo" />  → http://84.247.20.171:5000/uploads/photo.jpg

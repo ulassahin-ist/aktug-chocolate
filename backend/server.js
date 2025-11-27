@@ -12,7 +12,11 @@ const app = express();
 // ✅ CORS - Allow frontend origin
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://84.247.20.171"],
+    origin: [
+      "http://localhost:5173",
+      "https://aktugchocolate.com",
+      "https://www.aktugchocolate.com",
+    ],
     credentials: true,
   })
 );

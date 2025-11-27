@@ -17,23 +17,22 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // 🔹 Forward all /api requests to LOCAL backend
       "/api": {
         target: "http://localhost:5000", // ✅ Use localhost in dev
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         // Optionally log requests for debugging:
-        configure: (proxy, options) => {
-          proxy.on("proxyReq", (proxyReq, req, res) => {
-            console.log(
-              "🔄 Proxying:",
-              req.method,
-              req.url,
-              "→",
-              options.target + req.url.replace(/^\/api/, "")
-            );
-          });
-        },
+        // configure: (proxy, options) => {
+        //   proxy.on("proxyReq", (proxyReq, req, res) => {
+        //     console.log(
+        //       "🔄 Proxying:",
+        //       req.method,
+        //       req.url,
+        //       "→",
+        //       options.target + req.url.replace(/^\/api/, "")
+        //     );
+        //   });
+        // },
       },
     },
   },
