@@ -1,0 +1,47 @@
+Folder PATH listing
+Volume serial number is BE77-8510
+C:.
+-   App.vue
+-   main.js
+-   structure.txt
+-   style.css
+-   
++¦¦¦assets
+-       vue.svg
+-       
++¦¦¦components
+-       AdminTabs.vue
+-       Basket.vue
+-       Header.vue
+-       Modals.vue
+-       QRGuard.vue
+-       
++¦¦¦config
+-       api.js
+-       
++¦¦¦pages
+-       AdminCategories.vue
+-       AdminDashboard.vue
+-       AdminMenu.vue
+-       AdminOrders.vue
+-       AdminReports.vue
+-       AdminSettings.vue
+-       Checkout.vue
+-       Login.vue
+-       Menu.vue
+-       Register.vue
+-       Verify.vue
+-       Waiter.vue
+-       
++¦¦¦router
+-       index.js
+-       
++¦¦¦services
+-       api.js
+-       
+L¦¦¦store
+    -   index.js
+    -   
+    L¦¦¦modules
+            basket.js
+            
