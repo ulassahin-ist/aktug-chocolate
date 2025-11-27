@@ -80,7 +80,7 @@ const submit = async () => {
   error.value = "";
 
   try {
-    await api.post(`/api/auth/register`, {
+    await api.post(`/auth/register`, {
       fullName: fullName.value,
       username: username.value,
       password: password.value,

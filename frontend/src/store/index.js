@@ -1,8 +1,7 @@
 // frontend/src/store/index.js
 import { createStore } from "vuex";
-import axios from "axios";
 import basketModule from "./modules/basket";
-
+import api from "@/config/api";
 const store = createStore({
   state: {
     token: localStorage.getItem("token") || "",
@@ -50,7 +49,7 @@ const store = createStore({
       }
 
       // Set default Authorization header
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
 
     logout(state) {
@@ -62,7 +61,7 @@ const store = createStore({
       localStorage.removeItem("token");
       localStorage.removeItem("role");
       localStorage.removeItem("user");
-      delete axios.defaults.headers.common["Authorization"];
+      delete api.defaults.headers.common["Authorization"];
     },
   },
 
@@ -71,7 +70,7 @@ const store = createStore({
       try {
         const branchId = state.branchId || 1;
 
-        const res = await axios.post("/api/auth/login", {
+        const res = await api.post("/auth/login", {
           username,
           password,
           branchId,
@@ -95,9 +94,8 @@ const store = createStore({
       if (!state.token) return false;
 
       try {
-        await axios.get("/api/menu", {
+        await api.get("/menu", {
           params: { branchId: state.branchId || 1 },
-          headers: { Authorization: `Bearer ${state.token}` },
         });
         return true;
       } catch (err) {
@@ -118,9 +116,7 @@ const store = createStore({
 
 // Set axios default header on store creation if token exists
 if (store.state.token) {
-  axios.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${store.state.token}`;
+  api.defaults.headers.common["Authorization"] = `Bearer ${store.state.token}`;
 }
 
 export default store;

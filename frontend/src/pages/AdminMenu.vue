@@ -141,8 +141,8 @@ const fetchItems = async () => {
     const branchId = getBranchId();
 
     const [menuRes, catRes] = await Promise.all([
-      api.get("/api/menu", { params: { branchId } }),
-      api.get("/api/categories", { params: { branchId } }),
+      api.get("/menu", { params: { branchId } }),
+      api.get("/categories", { params: { branchId } }),
     ]);
 
     items.value = menuRes.data.sort((a, b) => a.name.localeCompare(b.name));
@@ -166,7 +166,7 @@ const addNewItem = async () => {
   try {
     const branchId = getBranchId();
 
-    const res = await api.post(`/api/menu`, {
+    const res = await api.post(`/menu`, {
       branchId,
       name: "Yeni Ürün",
       description: "Açıklama",
@@ -194,7 +194,7 @@ const saveField = async (item) => {
     editing.value = { item: null, field: null };
     const branchId = getBranchId();
 
-    await api.post(`/api/menu`, {
+    await api.post(`/menu`, {
       ...item,
       branchId,
     });
@@ -212,7 +212,7 @@ const handleEnter = (event, item) => {
 const updateItem = async (item) => {
   try {
     const branchId = getBranchId();
-    await api.post(`/api/menu`, {
+    await api.post(`/menu`, {
       ...item,
       branchId,
     });
@@ -227,7 +227,7 @@ const deleteItem = async (id) => {
   try {
     const branchId = getBranchId();
 
-    await api.delete(`/api/menu/${id}`, {
+    await api.delete(`//menu/${id}`, {
       params: { branchId },
     });
 
@@ -248,7 +248,7 @@ const onImageChange = async (event, item) => {
     const formData = new FormData();
     formData.append("photo", file);
 
-    const res = await api.post(`/api/menu/${item.id}/photo`, formData, {
+    const res = await api.post(`//menu/${item.id}/photo`, formData, {
       params: { branchId },
       headers: { "Content-Type": "multipart/form-data" },
     });

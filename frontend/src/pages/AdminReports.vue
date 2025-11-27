@@ -97,7 +97,7 @@ const endDate = ref("");
 // Fetch all completed orders once; filter on frontend
 const fetchOrders = async () => {
   try {
-    const res = await api.get(`/api/orders/completed`);
+    const res = await api.get(`/orders/completed`);
     orders.value = res.data || [];
   } catch (err) {
     console.error("Reports error:", err);

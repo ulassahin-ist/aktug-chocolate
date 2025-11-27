@@ -79,7 +79,7 @@ export default {
       const branchId = rootState.branchId || 1;
 
       try {
-        const res = await api.get(`/api/menu`, {
+        const res = await api.get(`/menu`, {
           params: { branchId },
           // ⚠️ DON'T send auth header - basket validation should work for guests
           validateStatus: (status) => status < 500, // Accept 4xx errors

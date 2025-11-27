@@ -1,10 +1,10 @@
 // src/config/api.js
 import axios from "axios";
 
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+export const API_BASE = "84.247.20.171";
 
 const api = axios.create({
-  baseURL: API_BASE,
+  baseURL: "/api",
 });
 
 api.interceptors.request.use((config) => {

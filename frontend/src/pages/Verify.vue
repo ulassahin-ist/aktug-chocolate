@@ -56,7 +56,7 @@ onMounted(async () => {
   }
 
   try {
-    const res = await api.get(`/api/auth/verify`, {
+    const res = await api.get(`/auth/verify`, {
       params: { token },
     });
 

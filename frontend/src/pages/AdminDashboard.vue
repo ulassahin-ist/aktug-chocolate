@@ -54,7 +54,7 @@ const weeklyRevenue = ref([]);
 
 const fetchStats = async () => {
   try {
-    const res = await api.get(`/api/stats`);
+    const res = await api.get(`/stats`);
 
     todayRevenue.value = Number(res.data.todayRevenue || 0);
     monthRevenue.value = Number(res.data.monthRevenue || 0);

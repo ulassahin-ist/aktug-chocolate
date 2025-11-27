@@ -109,7 +109,7 @@ const submitOrder = async () => {
   try {
     const branch = getBranchId();
 
-    await api.post(`/api/orders/create`, {
+    await api.post(`/orders/create`, {
       items: items.value,
       total: total.value,
       tableId: tableId.value,

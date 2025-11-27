@@ -22,12 +22,12 @@ const categoryRoutes = require("./routes/categories");
 const statsRoutes = require("./routes/stats");
 const branchRoutes = require("./routes/branches");
 
-app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/menu", menuRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/stats", statsRoutes);
-app.use("/api/branches", branchRoutes);
+app.use("/auth", authRoutes);
+app.use("/orders", orderRoutes);
+app.use("/menu", menuRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/stats", statsRoutes);
+app.use("/branches", branchRoutes);
 
 // Simple health check
 app.get("/health", (_req, res) => res.json({ ok: true }));

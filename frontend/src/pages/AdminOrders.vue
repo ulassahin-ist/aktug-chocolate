@@ -59,7 +59,7 @@ const fetchOrders = async () => {
   try {
     const branchId = getBranchId();
 
-    const res = await api.get(`/api/orders/active`, {
+    const res = await api.get(`/orders/active`, {
       params: { branchId },
     });
 
@@ -75,7 +75,7 @@ const complete = async (id) => {
   try {
     const branchId = getBranchId();
 
-    await api.put(`/api/orders/complete`, { orderId: id, branchId });
+    await api.put(`/orders/complete`, { orderId: id, branchId });
 
     window.$toast("Sipariş tamamlandı!", "success");
     fetchOrders();

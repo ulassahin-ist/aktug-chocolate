@@ -104,7 +104,7 @@ const orderChanged = computed(() => {
 // 🔹 Fetch all branches
 const fetchBranches = async () => {
   try {
-    const res = await api.get(`/api/branches`);
+    const res = await api.get(`/branches`);
     branches.value = res.data;
 
     // use current branch from composable, fallback to first branch
@@ -122,7 +122,7 @@ const fetchCategories = async () => {
 
     const current = selectedBranchId.value || getBranchId();
 
-    const res = await api.get(`/api/categories`, {
+    const res = await api.get(`/categories`, {
       params: { branchId: current },
     });
 
@@ -169,7 +169,7 @@ const saveCategoryOrder = async () => {
     const current = selectedBranchId.value || getBranchId();
     const order = categories.value.map((cat) => cat.id);
 
-    await api.post(`/api/categories/reorder`, {
+    await api.post(`/categories/reorder`, {
       order,
       branchId: current,
     });

@@ -89,10 +89,10 @@ onMounted(async () => {
   try {
     const branchId = getBranchId();
 
-    const res = await api.get(`/api/menu`, {
+    const res = await api.get(`/menu`, {
       params: { branchId },
     });
-
+    console.log(res.data);
     menu.value = res.data || [];
   } catch (err) {
     console.error("Menu load error:", err?.response?.data || err);

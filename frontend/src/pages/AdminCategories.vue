@@ -58,7 +58,7 @@ const editing = ref(null);
 const fetchCategories = async () => {
   try {
     const branchId = getBranchId();
-    const res = await api.get(`/api/categories`, {
+    const res = await api.get(`/categories`, {
       params: { branchId },
     });
     categories.value = res.data;
@@ -83,7 +83,7 @@ const addNewCategory = async () => {
     }
 
     // Send to backend (branch-aware)
-    const res = await api.post(`/api/categories`, {
+    const res = await api.post(`/categories`, {
       name,
       branchId,
     });
@@ -109,7 +109,7 @@ const saveCategory = async (cat) => {
     editing.value = null;
     const branchId = getBranchId();
 
-    await api.post(`/api/categories`, {
+    await api.post(`/categories`, {
       id: cat.id,
       name: cat.name,
       branchId,
@@ -136,7 +136,7 @@ const deleteCategory = async (id) => {
   try {
     const branchId = getBranchId();
 
-    await api.delete(`/api/categories/${id}`, {
+    await api.delete(`/categories/${id}`, {
       params: { branchId },
     });
 
