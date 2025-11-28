@@ -7,10 +7,10 @@
     </div>
 
     <nav class="nav-links">
-      <router-link to="/">Menu</router-link>
+      <router-link to="/">Menü</router-link>
       <router-link v-if="isAdmin || isStaff" to="/admin">Panel</router-link>
-      <router-link v-if="!token" to="/login">Login</router-link>
-      <router-link v-if="!token" to="/register">Register</router-link>
+      <router-link v-if="!token" to="/login">Giriş</router-link>
+      <router-link v-if="!token" to="/register">Üye Ol</router-link>
 
       <a v-if="token" href="#" @click.prevent="logout"> Logout </a>
     </nav>
@@ -33,7 +33,6 @@ const { isAdmin, isStaff, token, logout } = useGlobal();
   position: sticky;
   top: 0;
   z-index: 100;
-
   /* Softer premium shadow */
   box-shadow: 0 8px 24px rgba(62, 44, 39, 0.35);
 }
@@ -43,12 +42,12 @@ const { isAdmin, isStaff, token, logout } = useGlobal();
 .logo {
   display: flex;
   align-items: center;
+  max-width: 186px;
   height: 24px;
   background: var(--espresso);
   overflow: hidden;
 }
 .logo img {
-  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -64,6 +63,8 @@ const { isAdmin, isStaff, token, logout } = useGlobal();
   font-weight: 500;
   transition: 0.25s ease;
   padding-bottom: 2px;
+  font-size: 16px;
+  white-space: nowrap;
 }
 
 /* Hover = gold */
@@ -75,5 +76,16 @@ const { isAdmin, isStaff, token, logout } = useGlobal();
 .router-link-active {
   color: var(--gold);
   border-bottom: 2px solid var(--gold);
+}
+@media (max-width: 700px) {
+  .header {
+    padding: 1rem 1rem;
+  }
+  .nav-links {
+    gap: 10px;
+  }
+  .nav-links a {
+    font-size: 14px;
+  }
 }
 </style>

@@ -92,6 +92,7 @@ const handleLogin = async () => {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
   align-content: center;
   border: 1px solid rgba(249, 247, 244, 0.3);
+  backdrop-filter: blur(6px);
 }
 
 /* circular logo badge */
@@ -216,6 +217,16 @@ button:disabled {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .login-card {
+    transform: translateY(-70px);
+    padding: 2rem 2.5rem;
+    height: 300px;
+    max-width: 400px;
+    width: 90%;
   }
 }
 </style>

@@ -231,18 +231,23 @@ const clearFilters = () => {
 }
 
 .pagination button {
-  padding: 0.5rem 1rem;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 700;
   border: 1px solid var(--gold2);
-  background: var(--cream);
-  border-radius: 6px;
+  background: white;
+  border-radius: 50%;
   cursor: pointer;
   transition: 0.2s;
+  line-height: 0;
   color: var(--espresso);
 }
 
 .pagination button:hover:not(:disabled) {
   background: var(--gold);
-  color: var(--espresso);
+  color: white;
 }
 
 .pagination button:disabled {
@@ -309,5 +314,112 @@ const clearFilters = () => {
 .summary strong {
   font-weight: 600;
   color: var(--gold2);
+}
+@media (max-width: 700px) {
+  .reports {
+    padding: 0.5rem;
+  }
+
+  /* Stack filters instead of side-by-side */
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .filters-left,
+  .filters-right {
+    width: 100%;
+  }
+
+  /* Date inputs: one per line, full width */
+  .filters-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filters-left label {
+    flex: 1 1 100%;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filters-left input[type="date"] {
+    margin-left: 0;
+    margin-top: 0.2rem;
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  /* Quick filter buttons: 2x2 grid, big tap targets */
+  .filters-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: space-between;
+  }
+
+  .filters-right button {
+    flex: 1 1 calc(50% - 0.4rem);
+    margin-left: 0;
+    padding: 0.45rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 999px; /* pill-like */
+    text-align: center;
+  }
+
+  /* Summary: stack on mobile */
+  .summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+  }
+
+  /* Table adjustments (you already had some) */
+  .menu-table th,
+  .menu-table td {
+    padding: 0.4rem;
+    font-size: 13px;
+  }
+
+  /* Pills: nicer & scrollable row if many items */
+  .items-list {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .item-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  /* If there are too many pills, horizontal scroll instead of huge wrapping */
+  .menu-table td .items-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .menu-table td .item-pill {
+    flex: 0 0 auto;
+  }
+  .pagination {
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .pagination button {
+    padding: 0.4rem 0.8rem;
+    min-width: 2.2rem;
+  }
 }
 </style>

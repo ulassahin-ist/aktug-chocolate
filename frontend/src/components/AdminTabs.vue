@@ -2,22 +2,22 @@
   <div class="admin-tabs">
     <nav class="tabs">
       <router-link to="/admin/dashboard" class="tab" active-class="active"
-        >Dashboard</router-link
+        >Panel</router-link
       >
       <router-link to="/admin/orders" class="tab" active-class="active"
-        >Orders</router-link
+        >Siparişler</router-link
       >
       <router-link to="/admin/menu" class="tab" active-class="active"
-        >Menu</router-link
+        >Menü</router-link
       >
       <router-link to="/admin/categories" class="tab" active-class="active"
-        >Categories</router-link
+        >Kategoriler</router-link
       >
       <router-link to="/admin/reports" class="tab" active-class="active"
-        >Reports</router-link
+        >Raporlar</router-link
       >
       <router-link to="/admin/settings" class="tab" active-class="active"
-        >Settings</router-link
+        >Ayarlar</router-link
       >
     </nav>
 
@@ -92,7 +92,7 @@ watch(
 /* Active tab state */
 .tab.active {
   background: var(--gold);
-  color: var(--espresso);
+  color: white;
   font-weight: 600;
   border-color: var(--gold2);
   box-shadow: 0 -2px 6px rgba(62, 44, 39, 0.1);
@@ -117,7 +117,15 @@ watch(
   .admin-tabs {
     width: 100%;
     margin: 0;
+    padding: 16px 2px;
     height: calc(100vh - var(--scroll-offset));
+  }
+  .tab {
+    padding: 6px 6px;
+    font-size: 13px;
+  }
+  .tab-content {
+    padding: 15px 2px;
   }
 }
 </style>

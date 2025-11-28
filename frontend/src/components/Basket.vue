@@ -97,7 +97,7 @@ const goCheckout = async () => {
   font-weight: bold;
   cursor: pointer;
   z-index: 9998;
-  box-shadow: 0 5px 15px rgba(201, 162, 39, 0.45);
+  box-shadow: 0 5px 15px #3e2c276f;
 }
 
 /* Drawer Overlay */

@@ -135,10 +135,11 @@ const submitOrder = async () => {
   padding: 2rem 1.5rem;
   font-family: "Poppins", sans-serif;
   background: var(--cream);
-  min-height: 100vh;
+  height: calc(100vh - var(--scroll-offset));
   color: var(--espresso);
   max-width: 1500px;
   overflow-y: auto;
+  position: relative;
 }
 
 .title {
@@ -179,10 +180,12 @@ const submitOrder = async () => {
 
 /* ✅ Main Checkout Grid */
 .checkout-wrapper {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  gap: 1.75rem;
+  display: flex;
+  gap: 36px;
   align-items: flex-start;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 /* ✅ Summary Box */
@@ -195,6 +198,9 @@ const submitOrder = async () => {
   position: relative;
   box-sizing: border-box;
   padding-bottom: 70px;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
 }
 
 .summary-box h2 {
@@ -272,6 +278,7 @@ const submitOrder = async () => {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  width: 60%;
 }
 
 input,
@@ -337,11 +344,15 @@ textarea {
   }
 
   .checkout-wrapper {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .summary-box {
-    max-height: 50vh;
+    width: 100%;
+    max-height: calc(100% - 513px);
+  }
+  .form-box {
+    width: 100%;
   }
 
   .scroll-wrapper {
@@ -351,6 +362,9 @@ textarea {
   .summary-box,
   .form-box {
     padding: 1.2rem;
+  }
+  .total-line {
+    width: calc(100% - 37px);
   }
 }
 </style>

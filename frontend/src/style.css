@@ -41,10 +41,19 @@
   padding: 0;
   box-sizing: border-box;
   font-size: 16px;
-  user-select: none;
+  -webkit-user-select: none;
   -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-
+*:focus {
+  outline: none !important;
+}
+html,
+body {
+  -webkit-touch-callout: none;
+}
 body {
   background-color: var(--cream);
   color: var(--espresso);
@@ -54,6 +63,13 @@ body {
   max-width: 100vw;
   max-height: 100vh;
   overflow: hidden;
+}
+input,
+textarea {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+  pointer-events: auto;
 }
 #app {
   background-color: var(--cream);
@@ -106,4 +122,17 @@ button {
 }
 .scroll-wrapper::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+
+@media (max-width: 700px) {
+  .scroll-wrapper {
+    transform: translateX(10px);
+  }
+  table,
+  table span,
+  th,
+  td {
+    padding: 0.4rem;
+    font-size: 13px;
+  }
 }

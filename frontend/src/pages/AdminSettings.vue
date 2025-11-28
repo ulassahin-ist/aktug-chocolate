@@ -3,10 +3,8 @@
     <div class="scroll-wrapper">
       <!-- 🔹 Branch Selector -->
       <div class="setting-card">
-        <h3>🏢 Current Branch</h3>
-        <p class="description">
-          Switch between branches to manage their menu and orders
-        </p>
+        <h3>Seçili Şube</h3>
+        <p class="description">Diğer Şubeleri yönetmek için şube seçin.</p>
 
         <div class="branch-selector">
           <select v-model="selectedBranchId" @change="changeBranch">
@@ -21,9 +19,9 @@
         </div>
 
         <div v-if="currentBranch" class="branch-info">
-          <p><strong>Country:</strong> {{ currentBranch.country }}</p>
-          <p><strong>Currency:</strong> {{ currentBranch.currency }}</p>
-          <p><strong>Timezone:</strong> {{ currentBranch.timezone }}</p>
+          <p><strong>Ülke:</strong> {{ currentBranch.country }}</p>
+          <p><strong>Para Birimi:</strong> {{ currentBranch.currency }}</p>
+          <p><strong>Zaman Dilimi:</strong> {{ currentBranch.timezone }}</p>
         </div>
       </div>
 
@@ -33,8 +31,8 @@
           <div>
             <h3>Kategori Sıralaması</h3>
             <p class="description">
-              Drag and drop to reorder categories. Menu items will appear in
-              this order.
+              Kategorileri sürükleyip bırakarak yeniden sıralayın ve ardından
+              kaydedin.
             </p>
           </div>
           <div>
@@ -271,7 +269,7 @@ onMounted(async () => {
 .category-order {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: first baseline;
 }
 .category-list {
   display: flex;
@@ -325,15 +323,16 @@ onMounted(async () => {
 
 .save-btn {
   background: var(--gold);
-  color: var(--espresso);
-  border: 1px solid var(--gold2);
   color: white;
-  padding: 0.75rem 1.5rem;
+  letter-spacing: 1.3px;
+  font-size: 16px;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(201, 162, 39, 0.35);
+  transition: 0.2s;
 }
 
 .save-btn:hover:not(:disabled) {
@@ -359,5 +358,16 @@ onMounted(async () => {
 
 .category-list::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+
+@media (max-width: 700px) {
+  .admin-settings {
+    padding: 2px;
+  }
+  .save-btn {
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+    font-weight: 400;
+  }
 }
 </style>

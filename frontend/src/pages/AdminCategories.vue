@@ -2,7 +2,7 @@
   <div class="admin-menu">
     <div class="menu-header">
       <h2>Categories</h2>
-      <button class="add-btn" @click="addNewCategory">＋ Add Category</button>
+      <button class="add-btn" @click="addNewCategory">＋Ekle</button>
     </div>
 
     <table class="menu-table">
@@ -173,14 +173,16 @@ onMounted(fetchCategories);
 /* Add button */
 .add-btn {
   background: var(--gold);
-  color: var(--cream);
-  padding: 0.6rem 1.2rem;
+  color: white;
+  letter-spacing: 1.3px;
+  font-size: 16px;
+  padding: 6px 14px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.2s;
   box-shadow: 0 2px 6px rgba(201, 162, 39, 0.35);
+  transition: 0.2s;
 }
 
 .add-btn:hover {
@@ -246,5 +248,15 @@ td button:hover:not(:disabled) {
 td button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+@media (max-width: 700px) {
+  .menu-header h2 {
+    font-size: 18px;
+  }
+  .add-btn {
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+    font-weight: 400;
+  }
 }
 </style>

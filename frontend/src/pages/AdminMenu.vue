@@ -1,22 +1,22 @@
 <template>
   <div class="admin-menu">
     <div class="menu-header">
-      <h2>Menu Items</h2>
-      <button class="add-btn" @click="addNewItem">＋ Add Item</button>
+      <h2>Menü İçerikleri</h2>
+      <button class="add-btn" @click="addNewItem">＋Ekle</button>
     </div>
 
     <div class="scroll-wrapper">
       <table class="menu-table">
         <thead>
           <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Available</th>
-            <th>Actions</th>
+            <th>Görsel</th>
+            <th>İsim</th>
+            <th>Açıklama</th>
+            <th>Kategori</th>
+            <th>Fiyat</th>
+            <th>Stok</th>
+            <th>Aktif</th>
+            <th>Sil</th>
           </tr>
         </thead>
 
@@ -248,7 +248,7 @@ const onImageChange = async (event, item) => {
     const formData = new FormData();
     formData.append("photo", file);
 
-    const res = await api.post(`//menu/${item.id}/photo`, formData, {
+    const res = await api.post(`/menu/${item.id}/photo`, formData, {
       params: { branchId },
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -290,8 +290,10 @@ onMounted(fetchItems);
 /* Add button */
 .add-btn {
   background: var(--gold);
-  color: var(--cream);
-  padding: 0.6rem 1.2rem;
+  color: white;
+  letter-spacing: 1.3px;
+  font-size: 16px;
+  padding: 6px 14px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -322,6 +324,12 @@ onMounted(fetchItems);
   text-align: center;
   color: var(--espresso);
   background: white;
+}
+.menu-table td:nth-child(3) {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .menu-table tr {
   cursor: pointer;
@@ -426,5 +434,16 @@ td button {
 
 td button:hover {
   color: var(--gold);
+}
+
+@media (max-width: 700px) {
+  .menu-header h2 {
+    font-size: 18px;
+  }
+  .add-btn {
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+    font-weight: 400;
+  }
 }
 </style>

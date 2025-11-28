@@ -1,8 +1,8 @@
 <template>
   <div class="menu-container">
     <header class="menu-header">
-      <h1>MENU</h1>
-      <p>L'amour dans chaque bouchée...</p>
+      <h1>MENÜ</h1>
+      <p><i>Her ısırıkla farklı mutluluk...</i></p>
 
       <!-- CATEGORY SCROLL BAR -->
       <div class="category-scroll">
@@ -338,7 +338,17 @@ const scrollTo = (categoryName) => {
 }
 @media (max-width: 700px) {
   .menu-container {
-    padding-bottom: 70px;
+    padding: 16px 16px 70px;
+  }
+  .menu-header h1 {
+    font-size: 30px;
+    margin-bottom: 0;
+  }
+  .category-title {
+    font-size: 1.2rem;
+  }
+  .category-scroll {
+    padding-bottom: 0;
   }
 }
 </style>

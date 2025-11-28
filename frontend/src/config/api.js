@@ -1,13 +1,13 @@
 // frontend/src/config/api.js
 import axios from "axios";
 
-// ✅ ALWAYS use relative /api path (works in both dev and prod with Nginx proxy)
+// ALWAYS use relative /api path (works in both dev and prod with Nginx proxy)
 const api = axios.create({
   baseURL: "/api",
 });
 
-// ✅ For images only, use relative path (Nginx serves them)
-export const API_BASE = ""; // Empty = same domain
+//  For images only, use relative path (Nginx serves them)
+export const API_BASE = "";
 
 // Add token to requests
 api.interceptors.request.use((config) => {
