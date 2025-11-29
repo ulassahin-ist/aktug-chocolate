@@ -43,7 +43,7 @@
           ></textarea>
         </div>
 
-        <button class="checkout-btn" @click="submitOrder" :disabled="loading">
+        <button class="btn-primary" @click="submitOrder" :disabled="loading">
           {{ loading ? "Gönderiliyor..." : "Siparişi Gönder" }}
         </button>
       </div>
@@ -342,38 +342,6 @@ textarea {
   font-family: inherit;
 }
 
-/* Checkout button */
-.checkout-btn {
-  background: var(--gold);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 600;
-  box-shadow: 0 3px 10px rgba(201, 162, 39, 0.45);
-  margin-top: 0.5rem;
-}
-
-.checkout-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--highlight);
-  box-shadow: none;
-}
-
-.checkout-btn:hover:not(:disabled) {
-  background: var(--gold2);
-  box-shadow: 0 4px 12px rgba(164, 126, 59, 0.5);
-  transform: translateY(-2px);
-}
-
-.checkout-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
 /* Mobile responsive */
 @media (max-width: 900px) {
   .checkout-container {
@@ -440,11 +408,6 @@ textarea {
 
   textarea {
     min-height: 60px;
-  }
-
-  .checkout-btn {
-    padding: 0.875rem;
-    font-size: 1rem;
   }
 
   .empty-box {

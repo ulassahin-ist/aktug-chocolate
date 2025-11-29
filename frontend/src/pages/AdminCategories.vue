@@ -5,7 +5,7 @@
       <button class="add-btn" @click="addNewCategory">＋Ekle</button>
     </div>
 
-    <table class="menu-table">
+    <table class="data-table">
       <thead>
         <tr>
           <th>Name</th>
@@ -190,65 +190,6 @@ onMounted(fetchCategories);
   box-shadow: 0 3px 8px rgba(164, 126, 59, 0.4);
 }
 
-/* Table */
-.menu-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--cream);
-  border-radius: 10px;
-  border: 1px solid var(--gold2);
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.08);
-}
-
-.menu-table th,
-.menu-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--highlight);
-  text-align: center;
-  color: var(--espresso);
-  background: white;
-}
-
-.menu-table th {
-  background: var(--espresso);
-  color: var(--cream);
-  font-weight: 600;
-}
-
-/* Inputs */
-.menu-table input {
-  border: 1px solid var(--gold2);
-  padding: 0.25rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  background: var(--cream);
-  color: var(--espresso);
-}
-
-.menu-table input:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 4px rgba(201, 162, 39, 0.4);
-}
-
-/* Delete button */
-td button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  color: var(--espresso);
-  transition: 0.2s;
-}
-
-td button:hover:not(:disabled) {
-  color: var(--gold);
-}
-
-td button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
 @media (max-width: 700px) {
   .menu-header h2 {
     font-size: 18px;

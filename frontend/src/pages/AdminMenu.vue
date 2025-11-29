@@ -6,7 +6,7 @@
     </div>
 
     <div class="scroll-wrapper">
-      <table class="menu-table">
+      <table class="data-table">
         <thead>
           <tr>
             <th>Görsel</th>
@@ -312,90 +312,12 @@ onMounted(fetchItems);
 }
 
 /* Table */
-.menu-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--cream);
-  border-radius: 10px;
-  border: 1px solid var(--gold2);
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.08);
-}
-
-.menu-table th,
-.menu-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--gold2);
-  text-align: center;
-  color: var(--espresso);
-  background: white;
-}
-.menu-table td:nth-child(3) {
+.data-table td:nth-child(3) {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.menu-table tr {
-  cursor: pointer;
-}
-/* Table header */
-.menu-table th {
-  background: var(--espresso);
-  color: var(--cream);
-  border-bottom: 2px solid var(--gold2);
-  font-weight: 600;
-}
-
-/* Inputs */
-.menu-table input,
-.menu-table textarea,
-.menu-table select {
-  border: 1px solid var(--gold2);
-  padding: 0.25rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  min-width: 10px;
-  background: var(--cream);
-  color: var(--espresso);
-}
-
-.menu-table input:focus,
-.menu-table textarea:focus,
-.menu-table select:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 4px rgba(201, 162, 39, 0.4);
-  outline: none;
-}
-
-/* Checkbox */
-.menu-table input[type="checkbox"] {
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--espresso);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-  position: relative;
-  background-color: var(--cream);
-}
-
-.menu-table input[type="checkbox"]:checked {
-  background-color: var(--gold);
-  border-color: var(--gold);
-}
-
-.menu-table input[type="checkbox"]:checked::after {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -55%);
-  font-size: 1rem;
-  color: white;
-  font-weight: bold;
-}
-
 /* Image */
 .menu-photo {
   width: 40px;
@@ -404,40 +326,6 @@ onMounted(fetchItems);
   border-radius: 6px;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(62, 44, 39, 0.15);
-}
-
-/* Select dropdown arrow */
-.menu-table select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--espresso) 50%),
-    linear-gradient(135deg, var(--espresso) 50%, transparent 50%);
-  background-position: calc(100% - 20px) calc(1.1em + 2px),
-    calc(100% - 15px) calc(1.1em + 2px);
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-}
-
-.menu-table select:hover {
-  border-color: var(--gold);
-}
-
-.menu-table select:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 4px rgba(201, 162, 39, 0.4);
-}
-
-/* Delete button */
-td button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--espresso);
-  font-size: 1.1rem;
-  transition: 0.2s;
-}
-
-td button:hover {
-  color: var(--gold);
 }
 
 @media (max-width: 700px) {

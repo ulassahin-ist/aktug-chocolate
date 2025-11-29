@@ -36,7 +36,7 @@
             </div>
 
             <button class="basket-item-remove" @click="removeItem(item.id)">
-              <Icons name="trash" :size="20" />
+              <Icons name="trash" :size="20" color="red" />
             </button>
           </div>
         </div>

@@ -6,7 +6,7 @@
 
     <!-- 🔹 Wrap table for horizontal scroll on small screens -->
     <div class="scroll-wrapper">
-      <table class="menu-table">
+      <table class="data-table">
         <thead>
           <tr>
             <th>#</th>
@@ -21,7 +21,7 @@
         <tbody>
           <tr v-for="o in orders" :key="o.id">
             <td>{{ o.id }}</td>
-            <td>{{ o.tableNumber || "-" }}</td>
+            <td>{{ o.tableId || "-" }}</td>
 
             <!-- pills-cell + inner items-list like the other table -->
             <td class="pills-cell">
@@ -106,56 +106,9 @@ onMounted(fetchOrders);
   margin-bottom: 16px;
 }
 
-/* wrapper for horizontal scroll on narrow screens */
 .scroll-wrapper {
   width: 100%;
   overflow-x: auto;
-}
-
-/* ✅ Order Table = Menu Table */
-.menu-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  border: 1px solid var(--gold2);
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.08);
-}
-
-.menu-table th,
-.menu-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--highlight);
-  text-align: center;
-  font-size: 0.95rem;
-  color: var(--espresso);
-}
-
-.menu-table th {
-  background: var(--espresso);
-  color: var(--cream);
-  font-weight: 600;
-}
-
-/* Ürünler hücresi (desktop) */
-.pills-cell {
-  max-width: 320px;
-}
-
-.items-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
-}
-
-/* ✅ Small product pills (same style as other table) */
-.item-pill {
-  background: var(--highlight);
-  color: var(--espresso);
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
 }
 
 /* ✅ Complete button style */
@@ -188,40 +141,6 @@ onMounted(fetchOrders);
   .menu-header h2 {
     font-size: 18px;
     margin-bottom: 10px;
-  }
-
-  .menu-table {
-    font-size: 0.85rem;
-  }
-
-  .menu-table th,
-  .menu-table td {
-    padding: 0.4rem;
-    font-size: 13px;
-  }
-
-  /* pills cell: allow horizontal scroll when many items */
-  .pills-cell {
-    max-width: 100vw;
-    padding-bottom: 0.35rem;
-  }
-
-  .pills-cell .items-list {
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-
-  .pills-cell .item-pill {
-    flex: 0 0 auto; /* don't shrink, scroll instead */
-    padding: 4px 10px;
-    border-radius: 999px;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
   }
 
   /* Make the action button thumb-friendly */

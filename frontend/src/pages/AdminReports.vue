@@ -32,7 +32,7 @@
     </div>
 
     <div class="scroll-wrapper">
-      <table class="menu-table">
+      <table class="data-table">
         <thead>
           <tr>
             <th>#</th>
@@ -49,7 +49,7 @@
             <td>{{ order.tableNumber || "-" }}</td>
             <td>{{ formatPrice(order.total) }}</td>
             <td>{{ formatDate(order.orderTime) }}</td>
-            <td>
+            <td class="pills-cell">
               <div class="items-list">
                 <span
                   v-for="item in order.items"
@@ -180,46 +180,6 @@ const clearFilters = () => {
   height: 100%;
   background: var(--cream-light);
   color: var(--espresso);
-}
-
-.menu-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.08);
-}
-
-.menu-table th,
-.menu-table td {
-  padding: 0.75rem;
-  text-align: center;
-}
-
-.menu-table tr {
-  background: white;
-  border: 1px solid var(--gold);
-}
-
-.menu-table th {
-  background: var(--espresso);
-  color: var(--cream);
-  font-weight: 600;
-}
-
-.items-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
-}
-
-.item-pill {
-  background: var(--highlight);
-  color: var(--espresso);
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.8rem;
 }
 
 .pagination {
@@ -371,47 +331,6 @@ const clearFilters = () => {
     text-align: center;
   }
 
-  /* Summary: stack on mobile */
-  .summary {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  /* Table adjustments (you already had some) */
-  .menu-table th,
-  .menu-table td {
-    padding: 0.4rem;
-    font-size: 13px;
-  }
-
-  /* Pills: nicer & scrollable row if many items */
-  .items-list {
-    justify-content: flex-start;
-    gap: 6px;
-  }
-
-  .item-pill {
-    padding: 4px 10px;
-    border-radius: 999px;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-  }
-
-  /* If there are too many pills, horizontal scroll instead of huge wrapping */
-  .menu-table td .items-list {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-
-  .menu-table td .item-pill {
-    flex: 0 0 auto;
-  }
   .pagination {
     gap: 0.5rem;
     font-size: 0.85rem;
