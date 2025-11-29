@@ -35,12 +35,6 @@
 
       <!-- FORM -->
       <div class="form-box">
-        <!-- Table Display -->
-        <div class="table-info">
-          <label>Masa Numarası</label>
-          <input type="text" :value="`Masa ${tableId}`" disabled />
-        </div>
-
         <div class="notes-field">
           <label>Not (isteğe bağlı)</label>
           <textarea
@@ -304,7 +298,6 @@ const submitOrder = async () => {
   max-height: 100%;
 }
 
-.table-info,
 .notes-field {
   display: flex;
   flex-direction: column;
@@ -402,6 +395,9 @@ textarea {
   }
 
   .summary-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: auto;
     min-height: 200px;
     max-height: none;
@@ -432,8 +428,10 @@ textarea {
   }
 
   .total-line {
+    margin-top: 0;
     font-size: 1.1rem;
     padding: 0.75rem 0;
+    padding-bottom: 0;
   }
 
   .form-box {
@@ -441,7 +439,7 @@ textarea {
   }
 
   textarea {
-    min-height: 80px;
+    min-height: 60px;
   }
 
   .checkout-btn {
@@ -462,7 +460,7 @@ textarea {
   }
 
   .title {
-    font-size: 1.5rem;
+    display: none;
   }
 
   .checkout-wrapper {
@@ -474,15 +472,15 @@ textarea {
     height: 45px;
     min-width: 45px;
   }
-
-  .summary-box,
-  .form-box {
-    padding: 1rem;
+  .summary-box h2 {
+    margin-bottom: 0rem;
   }
-
-  .total-line {
-    padding: 0.6rem 0;
-    font-size: 1rem;
+  .summary-box {
+    padding: 0.5rem;
+  }
+  .form-box {
+    padding: 0.5rem;
+    gap: 0.5rem;
   }
 }
 </style>

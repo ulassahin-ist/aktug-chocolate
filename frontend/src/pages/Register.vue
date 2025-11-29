@@ -108,7 +108,7 @@ const submit = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
   background: var(--bg-gradient);
 }
 
@@ -245,7 +245,7 @@ button:disabled {
 
 @media (max-width: 700px) {
   .login-card {
-    transform: translateY(-40%);
+    transform: translateY(-50);
     padding: 2rem 2.5rem;
     height: fit-content;
     max-width: 400px;

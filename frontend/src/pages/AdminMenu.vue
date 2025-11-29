@@ -115,7 +115,11 @@
             </td>
 
             <!-- Delete -->
-            <td><button @click="deleteItem(item.id)">🗑️</button></td>
+            <td>
+              <button @click="deleteItem(item.id)">
+                <Icons name="trash" />
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

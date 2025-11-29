@@ -4,10 +4,12 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./style.css";
+import Icons from "./components/Icons.vue";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
+app.component("Icons", Icons);
 
 // 🔍 Debug token persistence
 window.addEventListener("storage", (e) => {

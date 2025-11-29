@@ -34,7 +34,7 @@
                 cat.itemCount > 0 ? 'Cannot delete: category in use' : 'Delete'
               "
             >
-              🗑️
+              <Icons name="trash" />
             </button>
           </td>
         </tr>

@@ -60,7 +60,7 @@
             @dragover.prevent
             @drop="drop(index)"
           >
-            <span class="drag-handle">☰</span>
+            <span class="drag-handle"><Icons name="menu" /></span>
             <span class="category-name">{{ cat.name }}</span>
             <span class="item-count">{{ cat.itemCount || 0 }} ürün</span>
           </div>
