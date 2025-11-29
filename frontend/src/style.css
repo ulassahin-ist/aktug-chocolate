@@ -307,7 +307,14 @@ button {
   transform: translateY(0);
   background: var(--highlight);
 }
-
+.btn-secondary:disabled {
+  background: var(--highlight);
+  color: rgba(62, 44, 39, 0.4);
+  cursor: not-allowed;
+  box-shadow: none;
+  text-shadow: none;
+  opacity: 0.6;
+}
 /* Small Button Variant */
 .btn-sm {
   padding: 0.5rem 1.25rem;
@@ -827,7 +834,7 @@ button {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -55%);
-  color: var(--espresso);
+  color: white;
   font-weight: bold;
   font-size: 16px;
 }

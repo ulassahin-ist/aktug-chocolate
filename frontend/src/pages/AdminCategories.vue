@@ -2,15 +2,15 @@
   <div class="admin-menu">
     <div class="menu-header">
       <h2>Categories</h2>
-      <button class="add-btn" @click="addNewCategory">＋Ekle</button>
+      <button class="btn-secondary" @click="addNewCategory">＋Ekle</button>
     </div>
 
     <table class="data-table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Item Count</th>
-          <th>Actions</th>
+          <th>İSİM</th>
+          <th>TANIMLI ÜRÜN</th>
+          <th>SİL</th>
         </tr>
       </thead>
 
@@ -165,39 +165,16 @@ onMounted(fetchCategories);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding-top: 2px;
 }
 .menu-header h2 {
   font-size: 24px;
   color: var(--espresso);
 }
-/* Add button */
-.add-btn {
-  background: var(--gold);
-  color: white;
-  letter-spacing: 1.3px;
-  font-size: 16px;
-  padding: 6px 14px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(201, 162, 39, 0.35);
-  transition: 0.2s;
-}
-
-.add-btn:hover {
-  background: var(--gold2);
-  box-shadow: 0 3px 8px rgba(164, 126, 59, 0.4);
-}
 
 @media (max-width: 700px) {
   .menu-header h2 {
     font-size: 18px;
-  }
-  .add-btn {
-    font-size: 14px;
-    padding: 0.5rem 1rem;
-    font-weight: 400;
   }
 }
 </style>

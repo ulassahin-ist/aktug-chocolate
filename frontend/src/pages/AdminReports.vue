@@ -14,7 +14,7 @@
       </div>
 
       <div class="filters-right">
-        <button @click="setQuickRange('today')">Bugün</button>
+        <button class="btn-sm" @click="setQuickRange('today')">Bugün</button>
         <button @click="setQuickRange('yesterday')">Dün</button>
         <button @click="setQuickRange('last7')">Son 7 Gün</button>
         <button @click="clearFilters">Tümü</button>
@@ -246,7 +246,7 @@ const clearFilters = () => {
   color: var(--espresso);
 }
 
-.filters-right button {
+/* .filters-right button {
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   border: 1px solid var(--gold2);
@@ -260,7 +260,7 @@ const clearFilters = () => {
 .filters-right button:hover {
   background: var(--gold);
   color: white;
-}
+} */
 
 .summary {
   display: flex;

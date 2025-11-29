@@ -3,7 +3,7 @@
     <div class="verify-card">
       <!-- Loading State -->
       <div v-if="loading" class="loading-state">
-        <div class="spinner"></div>
+        <div class="loading-spinner"></div>
         <h2>Doğrulanıyor...</h2>
         <p>Lütfen bekleyin</p>
       </div>
@@ -115,22 +115,6 @@ const goToHome = () => router.push("/");
 /* Loading State */
 .loading-state {
   padding: 20px;
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid var(--highlight);
-  border-top: 4px solid var(--gold);
-  border-radius: 50%;
-  margin: 0 auto 30px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .loading-state h2 {

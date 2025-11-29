@@ -307,53 +307,6 @@ const goCheckout = async () => {
 }
 
 /* ============================================
-   🔢 QUANTITY CONTROLS
-   ============================================ */
-
-.qty-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #fef9f0 0%, #fef5e7 100%);
-  padding: 4px 8px;
-  border-radius: 12px;
-  border: 1px solid rgba(164, 126, 59, 0.2);
-}
-
-.qty-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
-  color: var(--espresso);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(201, 162, 39, 0.3);
-}
-
-.qty-btn:hover {
-  background: linear-gradient(135deg, #e0c050 0%, #d4af37 100%);
-  transform: scale(1.05);
-  box-shadow: 0 3px 6px rgba(201, 162, 39, 0.4);
-}
-
-.qty-btn:active {
-  transform: scale(0.95);
-}
-
-.qty-display {
-  min-width: 24px;
-  text-align: center;
-  font-weight: 600;
-  color: var(--espresso);
-  font-size: 15px;
-}
-
-/* ============================================
    🗑️ REMOVE BUTTON
    ============================================ */
 
