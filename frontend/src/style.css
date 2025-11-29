@@ -35,6 +35,7 @@
   --font-accent: "Plus Jakarta Sans", sans-serif;
 
   --scroll-offset: 58px;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 * {
   margin: 0;
@@ -61,7 +62,21 @@ body {
   margin: 0;
   padding: 0;
   max-width: 100vw;
-  max-height: 100vh;
+  /* Use dvh (dynamic viewport height) for mobile browsers */
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior-y: contain;
+}
+
+#app {
+  background-color: var(--cream);
+  color: var(--espresso);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100dvh;
   overflow: hidden;
 }
 input,
@@ -70,16 +85,6 @@ textarea {
   user-select: text !important;
   -webkit-touch-callout: default !important;
   pointer-events: auto;
-}
-#app {
-  background-color: var(--cream);
-  color: var(--espresso);
-  font-family: var(--font-body);
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
 }
 h1,
 h2,
@@ -110,6 +115,7 @@ button {
   overflow-y: auto;
   max-height: 100%;
   padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Optional scrollbar styling for cleaner look */

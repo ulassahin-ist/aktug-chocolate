@@ -288,5 +288,25 @@ header h2 {
       transform: translateY(0);
     }
   }
+  .basket-float {
+    /* Add this: */
+    bottom: calc(30px + env(safe-area-inset-bottom, 20px));
+    right: 16px;
+    padding: 14px 22px;
+    font-size: 18px;
+  }
+
+  .basket-panel {
+    width: 100%;
+    height: 65%;
+    /* Add this line: */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 20px));
+    border-radius: 20px 20px 0 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-left: none;
+    border-top: 2px solid var(--gold2);
+  }
 }
 </style>

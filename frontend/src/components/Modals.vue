@@ -202,7 +202,82 @@ window.$prompt = prompt;
 
 @media (max-width: 900px) {
   .toast-container {
+    /* ✅ Top positioning with safe area */
+    top: calc(20px + env(safe-area-inset-top, 0px));
+    right: 50%;
+    transform: translateX(50%);
     width: 90%;
+    max-width: 90vw;
+    padding: 0 16px;
+  }
+
+  .toast {
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    /* ✅ Break long words */
+    word-break: break-word;
+  }
+}
+
+/* ✅ Modal overlay - prevent body scroll */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+
+  /* ✅ Add padding for safe areas */
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+
+  /* ✅ Prevent scroll behind modal */
+  overflow-y: auto;
+}
+
+.modal-box {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 1.7rem 2.2rem;
+  max-width: 90vw;
+  width: min(480px, 90vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: left;
+  box-shadow: 0 6px 16px rgba(62, 44, 39, 0.25);
+  border: 1px solid var(--gold2);
+  color: var(--espresso);
+
+  /* ✅ Better mobile padding */
+  margin: 20px;
+}
+
+@media (max-width: 600px) {
+  .modal-box {
+    padding: 1.5rem 1.5rem;
+    border-radius: 12px;
+    max-width: 95vw;
+  }
+
+  .modal-overlay h3 {
+    font-size: 1.3rem;
+  }
+
+  .modal-overlay p {
+    font-size: 0.95rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-ok,
+  .btn-cancel {
+    width: 100%;
+    padding: 0.75rem 1.2rem;
   }
 }
 

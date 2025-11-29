@@ -87,5 +87,8 @@ const { isAdmin, isStaff, token, logout } = useGlobal();
   .nav-links a {
     font-size: 14px;
   }
+  .logo {
+    padding: 2.5px 0;
+  }
 }
 </style>

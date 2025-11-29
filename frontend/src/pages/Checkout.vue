@@ -2,13 +2,13 @@
   <div class="checkout-container">
     <h1 class="title">Siparişi Tamamla</h1>
 
-    <!-- ✅ Empty Cart -->
+    <!-- Empty Cart -->
     <div v-if="items.length === 0" class="empty-box">
       <p>Sepetiniz boş.</p>
       <router-link to="/menu" class="back-btn">Menüye Dön</router-link>
     </div>
 
-    <!-- ✅ Checkout Form -->
+    <!-- Checkout Form -->
     <div v-else class="checkout-wrapper">
       <!-- SUMMARY -->
       <div class="summary-box">
@@ -36,8 +36,7 @@
       <!-- FORM -->
       <div class="form-box">
         <!-- Table Display Only -->
-        <label>Masa</label>
-        <input type="text" :value="tableIdText" disabled />
+        <input type="text" value="Masa tableId.value " disabled />
 
         <label>Not (isteğe bağlı)</label>
         <textarea
@@ -64,7 +63,6 @@ import { useGlobal } from "@/composables";
 const {
   isAdmin,
   tableId,
-  tableIdText,
   getBranchId,
   items,
   total,
@@ -72,7 +70,7 @@ const {
   clearBasket,
   formatPrice,
 } = useGlobal();
-
+console.log("Table ID:", tableId.value);
 const format = (v) => formatPrice(v);
 
 const notes = ref("");
@@ -135,13 +133,13 @@ const submitOrder = async () => {
   padding: 2rem 1.5rem;
   font-family: "Poppins", sans-serif;
   background: var(--cream);
-  height: calc(100vh - var(--scroll-offset));
+  height: calc(100dvh - var(--scroll-offset)); /* ✅ Changed */
   color: var(--espresso);
   max-width: 1500px;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px)); /* ✅ Added */
 }
-
 .title {
   text-align: center;
   font-size: 2.2rem;
@@ -186,6 +184,7 @@ const submitOrder = async () => {
   width: 100%;
   max-height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 /* ✅ Summary Box */
@@ -341,15 +340,19 @@ textarea {
   }
   .checkout-container {
     padding: 1rem;
+    height: calc(100dvh - var(--scroll-offset));
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 20px));
   }
 
   .checkout-wrapper {
     flex-direction: column;
+    gap: 8px;
   }
 
   .summary-box {
     width: 100%;
-    max-height: calc(100% - 513px);
+    max-height: 40vh;
+    flex-grow: 1;
   }
   .form-box {
     width: 100%;
@@ -357,6 +360,7 @@ textarea {
 
   .scroll-wrapper {
     max-height: calc(50vh - 120px);
+    -webkit-overflow-scrolling: touch;
   }
 
   .summary-box,

@@ -171,7 +171,7 @@ const scrollTo = (categoryName) => {
   font-family: "Poppins", sans-serif;
   background-color: var(--cream);
   color: var(--espresso);
-  height: calc(100vh - var(--scroll-offset));
+  height: calc(100dvh - var(--scroll-offset));
   overflow-y: auto;
 }
 
@@ -338,7 +338,9 @@ const scrollTo = (categoryName) => {
 }
 @media (max-width: 700px) {
   .menu-container {
-    padding: 16px 16px 70px;
+    padding: 16px 16px calc(90px + env(safe-area-inset-bottom, 20px));
+    height: calc(100dvh - var(--scroll-offset));
+    max-height: calc(100dvh - var(--scroll-offset));
   }
   .menu-header h1 {
     font-size: 30px;
@@ -349,6 +351,20 @@ const scrollTo = (categoryName) => {
   }
   .category-scroll {
     padding-bottom: 0;
+    padding-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .cat-btn {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+  .menu-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  .menu-grid:has(> .menu-card:only-child) {
+    grid-template-columns: 1fr;
   }
 }
 </style>

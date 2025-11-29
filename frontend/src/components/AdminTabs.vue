@@ -54,7 +54,7 @@ watch(
   background: var(--cream);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(62, 44, 39, 0.1);
-  height: calc(100vh - var(--scroll-offset) - 40px);
+  height: calc(100dvh - var(--scroll-offset) - 40px);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -118,7 +118,7 @@ watch(
     width: 100%;
     margin: 0;
     padding: 16px 2px;
-    height: calc(100vh - var(--scroll-offset));
+    height: calc(100dvh - var(--scroll-offset)); /* ✅ Changed */
   }
   .tab {
     padding: 6px 6px;
@@ -126,6 +126,9 @@ watch(
   }
   .tab-content {
     padding: 15px 2px;
+    padding-bottom: calc(
+      15px + env(safe-area-inset-bottom, 20px)
+    ); /* ✅ Added */
   }
 }
 </style>
