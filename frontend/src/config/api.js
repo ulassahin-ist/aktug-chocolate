@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 //  For images only, use relative path (Nginx serves them)
-export const API_BASE = "";
+export const API_BASE = "http://localhost:5000";
 
 // Add token to requests
 api.interceptors.request.use((config) => {
