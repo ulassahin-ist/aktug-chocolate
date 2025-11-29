@@ -35,14 +35,19 @@
 
       <!-- FORM -->
       <div class="form-box">
-        <!-- Table Display Only -->
-        <input type="text" value="Masa tableId.value " disabled />
+        <!-- Table Display -->
+        <div class="table-info">
+          <label>Masa Numarası</label>
+          <input type="text" :value="`Masa ${tableId}`" disabled />
+        </div>
 
-        <label>Not (isteğe bağlı)</label>
-        <textarea
-          v-model="notes"
-          placeholder="Örn: Fındık olmasın, çatal gönder..."
-        ></textarea>
+        <div class="notes-field">
+          <label>Not (isteğe bağlı)</label>
+          <textarea
+            v-model="notes"
+            placeholder="Örn: Fındık olmasın, çatal gönder..."
+          ></textarea>
+        </div>
 
         <button class="checkout-btn" @click="submitOrder" :disabled="loading">
           {{ loading ? "Gönderiliyor..." : "Siparişi Gönder" }}
@@ -70,7 +75,7 @@ const {
   clearBasket,
   formatPrice,
 } = useGlobal();
-console.log("Table ID:", tableId.value);
+
 const format = (v) => formatPrice(v);
 
 const notes = ref("");
@@ -133,37 +138,45 @@ const submitOrder = async () => {
   padding: 2rem 1.5rem;
   font-family: "Poppins", sans-serif;
   background: var(--cream);
-  height: calc(100dvh - var(--scroll-offset)); /* ✅ Changed */
+  height: calc(100dvh - var(--scroll-offset));
   color: var(--espresso);
   max-width: 1500px;
   overflow: hidden;
-  position: relative;
-  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px)); /* ✅ Added */
+  display: flex;
+  flex-direction: column;
 }
+
 .title {
   text-align: center;
   font-size: 2.2rem;
   margin-bottom: 1.5rem;
+  color: var(--espresso);
+  flex-shrink: 0;
 }
 
-/* ✅ Empty state */
+/* Empty state */
 .empty-box {
   text-align: center;
-  background: var(--cream);
+  background: white;
   border-radius: 16px;
-  padding: 2rem;
+  padding: 3rem 2rem;
   box-shadow: 0 5px 15px rgba(62, 44, 39, 0.12);
   border: 1px solid var(--gold2);
   max-width: 400px;
-  margin: auto;
+  margin: 2rem auto;
+}
+
+.empty-box p {
+  font-size: 1.1rem;
+  color: var(--espresso);
+  margin-bottom: 1.5rem;
 }
 
 .back-btn {
   display: inline-block;
-  margin-top: 1rem;
   background: var(--gold);
-  color: var(--espresso);
-  padding: 0.6rem 1.2rem;
+  color: white;
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
@@ -176,58 +189,64 @@ const submitOrder = async () => {
   box-shadow: 0 3px 8px rgba(164, 126, 59, 0.45);
 }
 
-/* ✅ Main Checkout Grid */
+/* Main Checkout Grid */
 .checkout-wrapper {
-  display: flex;
-  gap: 36px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
   width: 100%;
-  max-height: 100%;
+  flex: 1;
   overflow: hidden;
-  position: relative;
+  min-height: 0;
 }
 
-/* ✅ Summary Box */
+/* Summary Box */
 .summary-box {
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(62, 44, 39, 0.1);
   border: 1px solid var(--gold2);
-  position: relative;
-  box-sizing: border-box;
-  padding-bottom: 70px;
-  width: 40%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .summary-box h2 {
+  margin: 0;
   margin-bottom: 1rem;
   color: var(--espresso);
   text-align: center;
-  border-bottom: 1px solid var(--highlight);
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--highlight);
+  flex-shrink: 0;
 }
 
 .scroll-wrapper {
-  max-height: 400px;
+  flex: 1;
   overflow-y: auto;
-  padding-bottom: 30px;
+  padding-right: 0.5rem;
+  margin-bottom: 0;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .item-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.9rem;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--highlight);
 }
 
 .thumb {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
   border-radius: 10px;
   object-fit: cover;
-  margin-right: 10px;
   box-shadow: 0 2px 6px rgba(62, 44, 39, 0.2);
 }
 
@@ -235,39 +254,43 @@ const submitOrder = async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
 .name {
   font-weight: 600;
   color: var(--espresso);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .qty {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: rgba(62, 44, 39, 0.7);
 }
 
 .price {
   font-weight: bold;
   color: var(--espresso);
+  white-space: nowrap;
 }
 
-/* ✅ Total line */
+/* Total line */
 .total-line {
-  position: absolute;
-  bottom: 10px;
-  border-top: 1px solid var(--highlight);
+  flex-shrink: 0;
   background: white;
-  width: calc(100% - 48px);
+  border-top: 2px solid var(--highlight);
+  padding: 1rem 0;
   margin-top: 1rem;
-  padding-top: 0.8rem;
   display: flex;
   justify-content: space-between;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--espresso);
 }
 
-/* ✅ Form Box */
+/* Form Box */
 .form-box {
   background: white;
   border-radius: 16px;
@@ -276,8 +299,22 @@ const submitOrder = async () => {
   border: 1px solid var(--gold2);
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  width: 60%;
+  gap: 1.25rem;
+  height: fit-content;
+  max-height: 100%;
+}
+
+.table-info,
+.notes-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 600;
+  color: var(--espresso);
+  font-size: 0.95rem;
 }
 
 input,
@@ -285,23 +322,31 @@ textarea {
   width: 100%;
   border-radius: 8px;
   border: 1px solid var(--gold2);
-  padding: 0.7rem;
+  padding: 0.75rem;
   font-size: 1rem;
   font-family: inherit;
   outline: none;
   background: var(--cream);
   color: var(--espresso);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:disabled {
+  background: var(--highlight);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 input:focus,
 textarea:focus {
   border-color: var(--gold);
-  box-shadow: 0 0 4px rgba(201, 162, 39, 0.4);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
 }
 
 textarea {
-  min-height: 80px;
-  resize: none;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
 }
 
 /* Checkout button */
@@ -309,14 +354,14 @@ textarea {
   background: var(--gold);
   color: white;
   border: none;
-  padding: 0.9rem;
+  padding: 1rem;
   border-radius: 10px;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 5px;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
   font-weight: 600;
   box-shadow: 0 3px 10px rgba(201, 162, 39, 0.45);
+  margin-top: 0.5rem;
 }
 
 .checkout-btn:disabled {
@@ -329,46 +374,115 @@ textarea {
 .checkout-btn:hover:not(:disabled) {
   background: var(--gold2);
   box-shadow: 0 4px 12px rgba(164, 126, 59, 0.5);
+  transform: translateY(-2px);
 }
 
-/* ✅ Mobile responsive */
-@media (max-width: 700px) {
-  .title {
-    text-align: center;
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
-  }
+.checkout-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
   .checkout-container {
     padding: 1rem;
-    height: calc(100dvh - var(--scroll-offset));
     padding-bottom: calc(1rem + env(safe-area-inset-bottom, 20px));
+    height: calc(100dvh - var(--scroll-offset));
+  }
+
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
   }
 
   .checkout-wrapper {
-    flex-direction: column;
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .summary-box {
-    width: 100%;
-    max-height: 40vh;
-    flex-grow: 1;
-  }
-  .form-box {
-    width: 100%;
+    height: auto;
+    min-height: 200px;
+    max-height: none;
   }
 
   .scroll-wrapper {
-    max-height: calc(50vh - 120px);
-    -webkit-overflow-scrolling: touch;
+    max-height: 40vh;
+  }
+
+  .form-box {
+    position: sticky;
+    bottom: 0;
+  }
+
+  .thumb {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+  }
+
+  .name {
+    font-size: 0.9rem;
+  }
+
+  .qty,
+  .price {
+    font-size: 0.85rem;
+  }
+
+  .total-line {
+    font-size: 1.1rem;
+    padding: 0.75rem 0;
+  }
+
+  .form-box {
+    padding: 1.25rem;
+  }
+
+  textarea {
+    min-height: 80px;
+  }
+
+  .checkout-btn {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  .empty-box {
+    padding: 2rem 1.5rem;
+    margin: 1rem auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .checkout-container {
+    padding: 0.75rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 20px));
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .checkout-wrapper {
+    gap: 1rem;
+  }
+
+  .thumb {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
   }
 
   .summary-box,
   .form-box {
-    padding: 1.2rem;
+    padding: 1rem;
   }
+
   .total-line {
-    width: calc(100% - 37px);
+    padding: 0.6rem 0;
+    font-size: 1rem;
   }
 }
 </style>

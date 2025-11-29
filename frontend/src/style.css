@@ -118,16 +118,22 @@ button {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Optional scrollbar styling for cleaner look */
+/* Scrollbar styling for webkit browsers */
 .scroll-wrapper::-webkit-scrollbar {
   width: 6px;
 }
-.scroll-wrapper::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
+
+.scroll-wrapper::-webkit-scrollbar-track {
+  background: transparent;
 }
+
+.scroll-wrapper::-webkit-scrollbar-thumb {
+  background: var(--gold2);
+  border-radius: 6px;
+}
+
 .scroll-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
+  background: var(--gold);
 }
 
 @media (max-width: 700px) {

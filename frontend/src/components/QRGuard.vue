@@ -49,7 +49,7 @@ const hasValidTable = computed(() => {
   return tableId.value != null && tableId.value > 0;
 });
 
-// ✅ FIXED: Check current route path instead of meta
+// Check current route path
 const requiresTable = computed(() => {
   // List of routes that require tableId
   const protectedRoutes = ["/", "/menu", "/checkout"];
@@ -99,7 +99,8 @@ const goToLogin = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.5rem;
+  overflow-y: auto;
 }
 
 .warning-card {
@@ -107,10 +108,13 @@ const goToLogin = () => {
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 500px;
+  width: 100%;
   text-align: center;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   border: 2px solid var(--gold2);
   animation: slideUp 0.4s ease;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 @keyframes slideUp {
@@ -144,6 +148,7 @@ const goToLogin = () => {
   color: var(--espresso);
   margin-bottom: 1rem;
   font-size: 1.8rem;
+  line-height: 1.3;
 }
 
 .warning-card p {
@@ -170,15 +175,18 @@ const goToLogin = () => {
 .info-box p {
   margin-bottom: 0.75rem;
   color: var(--espresso);
+  font-weight: 600;
 }
 
 .info-box ol {
   margin: 0.75rem 0 0 1.25rem;
   color: var(--espresso);
+  padding-left: 0.5rem;
 }
 
 .info-box li {
   margin: 0.5rem 0;
+  line-height: 1.5;
 }
 
 .login-prompt {
@@ -191,6 +199,7 @@ const goToLogin = () => {
   color: var(--espresso);
   font-size: 0.95rem;
   margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .login-btn {
@@ -203,18 +212,29 @@ const goToLogin = () => {
   font-weight: 600;
   transition: 0.2s;
   box-shadow: 0 2px 6px rgba(62, 44, 39, 0.3);
+  font-size: 1rem;
 }
 
 .login-btn:hover {
   background: var(--gold2);
   color: var(--espresso);
   box-shadow: 0 3px 8px rgba(164, 126, 59, 0.45);
+  transform: translateY(-2px);
+}
+
+.login-btn:active {
+  transform: translateY(0);
 }
 
 .debug-info {
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--gold2);
+}
+
+.debug-info p {
+  margin-bottom: 0.75rem;
+  color: rgba(62, 44, 39, 0.7);
 }
 
 .bypass-btn {
@@ -225,17 +245,32 @@ const goToLogin = () => {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  margin-top: 0.75rem;
   transition: 0.2s;
+  font-size: 1rem;
 }
 
 .bypass-btn:hover {
   background: var(--gold2);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(164, 126, 59, 0.45);
 }
 
-@media (max-width: 600px) {
+.bypass-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .qr-warning-overlay {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
   .warning-card {
     padding: 2rem 1.5rem;
+    max-height: calc(100vh - 4rem);
+    margin: auto 0;
   }
 
   .warning-icon {
@@ -244,6 +279,126 @@ const goToLogin = () => {
 
   .warning-card h2 {
     font-size: 1.5rem;
+  }
+
+  .warning-card p {
+    font-size: 0.95rem;
+  }
+
+  .info-box {
+    padding: 1.25rem;
+  }
+
+  .info-box ol {
+    margin-left: 1rem;
+    padding-left: 0.25rem;
+  }
+
+  .info-box li {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .qr-warning-overlay {
+    padding: 0.75rem;
+    padding-top: 1.5rem;
+  }
+
+  .warning-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 16px;
+    padding-bottom: calc(1.75rem + env(safe-area-inset-bottom, 20px));
+  }
+
+  .warning-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .warning-card h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .warning-card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .sub-text {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .info-box {
+    padding: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .info-box p {
+    font-size: 0.9rem;
+  }
+
+  .info-box ol {
+    margin-left: 0.75rem;
+  }
+
+  .info-box li {
+    font-size: 0.85rem;
+    margin: 0.4rem 0;
+  }
+
+  .login-prompt,
+  .debug-info {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+
+  .prompt-text {
+    font-size: 0.9rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .login-btn,
+  .bypass-btn {
+    padding: 0.7rem 1.25rem;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+}
+
+/* Landscape mobile fix */
+@media (max-height: 600px) and (orientation: landscape) {
+  .qr-warning-overlay {
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+
+  .warning-card {
+    max-height: calc(100vh - 2rem);
+    padding: 1.5rem 1.25rem;
+  }
+
+  .warning-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .warning-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-box {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .login-prompt,
+  .debug-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
   }
 }
 </style>
