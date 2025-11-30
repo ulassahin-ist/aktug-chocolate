@@ -1109,7 +1109,8 @@ button {
   .data-table th,
   .data-table td {
     padding: 0.5rem 0.4rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 300;
   }
 
   .pills-cell {

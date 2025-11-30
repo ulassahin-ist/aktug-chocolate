@@ -287,7 +287,6 @@ const goCheckout = async () => {
   flex: 1;
   overflow-y: auto;
   margin-bottom: 1.5rem;
-  padding-right: 0.5rem;
 }
 
 .basket-content::-webkit-scrollbar {
