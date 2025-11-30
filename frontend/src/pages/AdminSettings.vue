@@ -213,7 +213,7 @@
 
             <div class="settings-row settings-row-inline">
               <label class="settings-label">
-                Stok 0 Ürünleri Göster
+                Stok Dışı Ürünleri Göster
                 <span class="settings-hint">
                   Stokta olmayan ürünler menüde dursun
                 </span>

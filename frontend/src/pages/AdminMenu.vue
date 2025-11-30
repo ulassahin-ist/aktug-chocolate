@@ -3,8 +3,8 @@
     <div class="menu-header">
       <div class="menu-header-left">
         <h2>Menü İçerikleri</h2>
-        <span class="menu-count" v-if="items.length">
-          ({{ items.length }} ürün)
+        <span class="badge badge-primary" v-if="items.length">
+          {{ items.length }} ürün
         </span>
       </div>
 
@@ -401,16 +401,6 @@ onMounted(fetchItems);
   gap: 0.5rem;
 }
 
-.menu-header h2 {
-  font-size: 24px;
-  color: var(--espresso);
-}
-
-.menu-count {
-  font-size: 0.9rem;
-  color: rgba(62, 44, 39, 0.7);
-}
-
 .menu-header-right {
   display: flex;
   align-items: center;
@@ -559,50 +549,6 @@ onMounted(fetchItems);
   text-align: center;
 }
 
-.toggle-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 38px;
-  height: 20px;
-}
-
-.toggle-wrapper input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background: rgba(62, 44, 39, 0.25);
-  border-radius: 999px;
-  transition: 0.2s;
-}
-
-.toggle-slider::before {
-  content: "";
-  position: absolute;
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  top: 3px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  transition: 0.2s;
-}
-
-.toggle-wrapper input:checked + .toggle-slider {
-  background: var(--gold2);
-}
-
-.toggle-wrapper input:checked + .toggle-slider::before {
-  transform: translateX(16px);
-}
-
 /* Actions */
 .actions-cell {
   text-align: center;
@@ -660,10 +606,6 @@ onMounted(fetchItems);
 
   .menu-header h2 {
     font-size: 18px;
-  }
-
-  .menu-count {
-    font-size: 0.8rem;
   }
 
   .menu-photo {

@@ -18,19 +18,3 @@ export function useGlobal() {
     ...useFormatters(),
   };
 }
-
-// import { useGlobal } from "@/composables";
-
-// const {
-//   // Auth
-//   token, user, role, isLoggedIn, isAdmin, isStaff, isStaffOrAdmin, isCustomer, login, logout, validateToken, requireAdmin, requireStaffOrAdmin,
-
-//   // Branch / Table
-//   branchId, tableId, tableIdText, setBranch, setTableId, getBranchId,
-
-//   // Basket
-//  items, total, itemCount,  addItem,  increaseQty,  decreaseQty,   removeItem, clearBasket, validateBasket,
-
-//   // Formatters
-//   formatPrice, formatDate, formatName,
-// } = useGlobal();

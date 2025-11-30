@@ -4,8 +4,13 @@ const router = express.Router();
 const { getPool } = require("../config/db");
 const { verifyToken, authorizeRoles } = require("../middleware/authMiddleware");
 
-// 🔹 Get all branches (admin only)
-router.get("/", verifyToken, authorizeRoles("admin"), async (req, res) => {
+/**
+ * 🔹 Public: list branches + settings
+ * Used by:
+ *  - Admin panel (settings .vue)
+ *  - Public/QR menu (to know how to behave by branch)
+ */
+router.get("/", async (req, res) => {
   try {
     const pool = getPool();
     const [rows] = await pool.query(`
@@ -35,6 +40,55 @@ router.get("/", verifyToken, authorizeRoles("admin"), async (req, res) => {
   }
 });
 
+/**
+ * 🔹 Public: get settings for a single branch
+ * Example: /api/branches/1/settings
+ * Can be used by public menu to decide what to show.
+ */
+router.get("/:id/settings", async (req, res) => {
+  try {
+    const pool = getPool();
+    const { id } = req.params;
+
+    const [rows] = await pool.query(
+      `
+      SELECT
+        id,
+        code,
+        name,
+        country,
+        timezone,
+        currency,
+        active,
+        menuDefaultStock,
+        menuDefaultPrice,
+        stockWarnEnabled,
+        stockWarnThreshold,
+        showInactiveMenuItems,
+        showOutOfStockItems,
+        ordersAutoRefreshEnabled,
+        ordersAutoRefreshSeconds
+      FROM Branches
+      WHERE id = ?
+      LIMIT 1
+      `,
+      [id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({ error: "Branch not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("❌ GET /branches/:id/settings error:", err);
+    res.status(500).json({ error: "Failed to fetch branch settings" });
+  }
+});
+
+/**
+ * 🔹 Admin-only: update settings for a branch
+ */
 router.post(
   "/:id/settings",
   verifyToken,
@@ -86,6 +140,7 @@ router.post(
         ]
       );
 
+      // Return updated row
       const [rows] = await pool.query(
         `
         SELECT
@@ -106,6 +161,7 @@ router.post(
           ordersAutoRefreshSeconds
         FROM Branches
         WHERE id = ?
+        LIMIT 1
         `,
         [id]
       );

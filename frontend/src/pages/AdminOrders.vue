@@ -3,7 +3,7 @@
     <header class="orders-header">
       <div class="orders-title-wrap">
         <h2>Aktif Siparişler</h2>
-        <span class="orders-count-badge" v-if="orders.length">
+        <span class="badge badge-primary" v-if="orders.length">
           {{ orders.length }} aktif
         </span>
       </div>
@@ -98,7 +98,7 @@ const completingId = ref(null);
 let pollTimer = null;
 
 /**
- * 🔄 Fetch active orders for current branch
+ *  Fetch active orders for current branch
  * @param {boolean} silent - if true, don't show error toasts (used for polling)
  */
 const fetchOrders = async (silent = false) => {
@@ -184,12 +184,6 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-.orders-header h2 {
-  font-size: 1.4rem;
-  margin: 0;
-  font-family: var(--font-heading);
 }
 
 .orders-count-badge {

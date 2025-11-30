@@ -1,3 +1,4 @@
+// composables/useBranch.js
 import { computed } from "vue";
 import { useStore } from "vuex";
 
@@ -24,21 +25,32 @@ export function useBranch() {
     tableId.value ? `Masa ${tableId.value}` : "Masa bilgisi yok"
   );
 
+  // 🔹 settings module getters
   const branchSettings = computed(
     () => store.getters["branchSettings/settings"]
   );
+
   const menuDefaultStock = computed(
     () => store.getters["branchSettings/menuDefaultStock"]
   );
   const menuDefaultPrice = computed(
     () => store.getters["branchSettings/menuDefaultPrice"]
   );
+
   const stockWarnEnabled = computed(
     () => store.getters["branchSettings/stockWarnEnabled"]
   );
   const stockWarnThreshold = computed(
     () => store.getters["branchSettings/stockWarnThreshold"]
   );
+
+  const showInactiveMenuItems = computed(
+    () => store.getters["branchSettings/showInactiveMenuItems"]
+  );
+  const showOutOfStockItems = computed(
+    () => store.getters["branchSettings/showOutOfStockItems"]
+  );
+
   const ordersAutoRefreshEnabled = computed(
     () => store.getters["branchSettings/ordersAutoRefreshEnabled"]
   );
@@ -46,7 +58,7 @@ export function useBranch() {
     () => store.getters["branchSettings/ordersAutoRefreshSeconds"]
   );
 
-  // Add fetch action
+  // 🔹 fetch action
   const fetchBranchSettings = async (force = false) => {
     return await store.dispatch("branchSettings/fetchSettings", force);
   };
@@ -58,11 +70,15 @@ export function useBranch() {
     setBranch,
     setTableId,
     getBranchId,
+
+    // settings
     branchSettings,
     menuDefaultStock,
     menuDefaultPrice,
     stockWarnEnabled,
     stockWarnThreshold,
+    showInactiveMenuItems,
+    showOutOfStockItems,
     ordersAutoRefreshEnabled,
     ordersAutoRefreshSeconds,
     fetchBranchSettings,

@@ -16,7 +16,13 @@ import Basket from "./components/Basket.vue";
 import QRGuard from "./components/QRGuard.vue";
 
 import { useGlobal } from "@/composables";
-const { setBranch, setTableId, getBranchId, validateBasket } = useGlobal();
+const {
+  setBranch,
+  setTableId,
+  getBranchId,
+  validateBasket,
+  fetchBranchSettings,
+} = useGlobal();
 
 onMounted(async () => {
   // 🔹 1) Read branchId and tableId from URL (QR code)
@@ -51,6 +57,6 @@ onMounted(async () => {
     );
   }
 
-  await fetchBranchSettings();
+  await fetchBranchSettings(false);
 });
 </script>

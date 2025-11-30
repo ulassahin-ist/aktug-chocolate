@@ -3,8 +3,8 @@
     <div class="menu-header">
       <div class="menu-header-left">
         <h2>Kategoriler</h2>
-        <span class="menu-count" v-if="categories.length">
-          ({{ categories.length }} kategori)
+        <span class="badge badge-primary" v-if="categories.length">
+          {{ categories.length }} kategori
         </span>
         <span
           v-if="uncategorizedCount > 0"
@@ -264,15 +264,6 @@ onMounted(async () => {
   gap: 0.5rem;
 }
 
-.menu-header h2 {
-  font-size: 24px;
-  color: var(--espresso);
-}
-
-.menu-count {
-  font-size: 0.9rem;
-  color: rgba(62, 44, 39, 0.7);
-}
 .uncategorized-pill {
   font-size: 0.8rem;
   font-weight: 600;
@@ -411,14 +402,6 @@ onMounted(async () => {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
-  }
-
-  .menu-header h2 {
-    font-size: 18px;
-  }
-
-  .menu-count {
-    font-size: 0.8rem;
   }
 
   .menu-header-right {

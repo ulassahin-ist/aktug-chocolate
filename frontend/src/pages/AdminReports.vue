@@ -3,41 +3,7 @@
     <!-- 🔹 Header: Filters + Pagination -->
     <div class="reports-header">
       <!-- Filters -->
-      <div class="filters">
-        <div class="filters-dates">
-          <label class="date-label">
-            <span class="label-text">Başlangıç</span>
-            <input type="date" v-model="startDate" />
-          </label>
-          <label class="date-label">
-            <span class="label-text">Bitiş</span>
-            <input type="date" v-model="endDate" />
-          </label>
-        </div>
-
-        <div class="filters-quick">
-          <button class="chip-btn" @click="setQuickRange('today')">
-            Bugün
-          </button>
-          <button class="chip-btn" @click="setQuickRange('yesterday')">
-            Dün
-          </button>
-          <button class="chip-btn" @click="setQuickRange('last7')">
-            Son 7 Gün
-          </button>
-          <button class="chip-btn" @click="clearFilters">Tümü</button>
-        </div>
-        <!-- Pagination (only for filtered data, from backend) -->
-        <div v-if="totalCount > 0" class="pagination">
-          <button :disabled="page === 1 || loading" @click="goPrev">←</button>
-          <span class="pagination-info">
-            Sayfa {{ page }} / {{ totalPages }}
-          </span>
-          <button :disabled="page === totalPages || loading" @click="goNext">
-            →
-          </button>
-        </div>
-      </div>
+      <h2>Raporlar</h2>
     </div>
 
     <!-- 🔹 Summary -->
@@ -98,6 +64,39 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="filters">
+      <div class="filters-dates">
+        <label class="date-label">
+          <span class="label-text">Başlangıç</span>
+          <input type="date" v-model="startDate" />
+        </label>
+        <label class="date-label">
+          <span class="label-text">Bitiş</span>
+          <input type="date" v-model="endDate" />
+        </label>
+      </div>
+
+      <div class="filters-quick">
+        <button class="chip-btn" @click="setQuickRange('today')">Bugün</button>
+        <button class="chip-btn" @click="setQuickRange('yesterday')">
+          Dün
+        </button>
+        <button class="chip-btn" @click="setQuickRange('last7')">
+          Son 7 Gün
+        </button>
+        <button class="chip-btn" @click="clearFilters">Tümü</button>
+      </div>
+      <!-- Pagination (only for filtered data, from backend) -->
+      <div v-if="totalCount > 0" class="pagination">
+        <button :disabled="page === 1 || loading" @click="goPrev">←</button>
+        <span class="pagination-info">
+          Sayfa {{ page }} / {{ totalPages }}
+        </span>
+        <button :disabled="page === totalPages || loading" @click="goNext">
+          →
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -235,10 +234,9 @@ const clearFilters = () => {
 
 /* Filters container */
 .filters {
-  padding: 0 20px 0 10px;
+  padding: 10px 20px 0 10px;
   display: flex;
   gap: 0.35rem;
-  flex: 1;
   min-width: 0;
   justify-content: space-between;
 }

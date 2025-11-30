@@ -46,10 +46,23 @@
               "
               :alt="item.name"
             />
-            <div v-if="item.stock <= 0" class="stock-badge out-of-stock">
+
+            <!-- out of stock badge (only if we show them) -->
+            <div
+              v-if="item.stock <= 0 && showOutOfStockItems"
+              class="stock-badge out-of-stock"
+            >
               Tükendi
             </div>
-            <div v-else-if="item.stock <= 3" class="stock-badge low-stock">
+
+            <div
+              v-else-if="
+                stockWarnEnabled &&
+                item.stock > 0 &&
+                item.stock <= stockWarnThreshold
+              "
+              class="stock-badge low-stock"
+            >
               Son {{ item.stock }}!
             </div>
           </div>
@@ -386,7 +399,16 @@ import { ref, computed, onMounted } from "vue";
 import api, { API_BASE } from "@/config/api";
 import { useGlobal } from "@/composables";
 
-const { getBranchId, addItem, items: basketItems } = useGlobal();
+const {
+  getBranchId,
+  addItem,
+  items: basketItems,
+  showInactiveMenuItems,
+  showOutOfStockItems,
+  stockWarnEnabled,
+  stockWarnThreshold,
+  fetchBranchSettings,
+} = useGlobal();
 
 const menu = ref([]);
 const loading = ref(true);
@@ -395,6 +417,10 @@ onMounted(async () => {
   try {
     const branchId = getBranchId();
 
+    // 1️⃣ Make sure settings are loaded (cached, so cheap after first call)
+    await fetchBranchSettings(false);
+
+    // 2️⃣ Then load menu
     const res = await api.get(`/menu`, {
       params: { branchId },
     });
@@ -435,12 +461,24 @@ const handleAddToBasket = (item) => {
   });
 };
 
-// ✅ Group by category with sortOrder support
+// 🔎 Apply visibility rules from branch settings
+const visibleMenu = computed(() => {
+  return menu.value.filter((item) => {
+    // hide inactive items if setting is off
+    if (!showInactiveMenuItems.value && !item.available) return false;
+
+    // hide out-of-stock if setting is off
+    if (!showOutOfStockItems.value && item.stock <= 0) return false;
+
+    return true;
+  });
+});
+
+// ✅ Group by category with sortOrder support, using visibleMenu
 const grouped = computed(() => {
-  // Map: categoryName -> { name, sortOrder, items: [] }
   const map = new Map();
 
-  menu.value.forEach((item) => {
+  visibleMenu.value.forEach((item) => {
     const catName = item.categoryName || "Diğer";
     const sortOrder =
       item.categorySortOrder !== null && item.categorySortOrder !== undefined
@@ -453,7 +491,6 @@ const grouped = computed(() => {
     map.get(catName).items.push(item);
   });
 
-  // Convert to array and sort by sortOrder, then name
   return Array.from(map.values()).sort((a, b) => {
     if (a.sortOrder === b.sortOrder) {
       return a.name.localeCompare(b.name, "tr-TR");
@@ -462,7 +499,6 @@ const grouped = computed(() => {
   });
 });
 
-// ✅ Smooth scroll to section
 const scrollTo = (categoryName) => {
   const el = document.getElementById(`cat-${categoryName}`);
   if (el) {

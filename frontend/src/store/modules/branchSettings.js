@@ -102,13 +102,9 @@ export default {
       commit("SET_ERROR", null);
 
       try {
-        // ✅ Fetch all branches, then find current one
-        const res = await api.get(`/branches`, {
-          params: { branchId },
-        });
-
-        const branches = res.data || [];
-        const currentBranch = branches.find((b) => b.id === branchId);
+        // ✅ new endpoint: one branch, with settings
+        const res = await api.get(`/branches/${branchId}/settings`);
+        const currentBranch = res.data;
 
         if (!currentBranch) {
           throw new Error(`Branch ${branchId} not found`);
@@ -122,7 +118,7 @@ export default {
         commit("SET_ERROR", errorMsg);
         console.error("❌ Failed to fetch branch settings:", err);
 
-        // Return default settings on error
+        // Return & store safe defaults so getters still work
         const defaults = {
           menuDefaultStock: 20,
           menuDefaultPrice: 400,
