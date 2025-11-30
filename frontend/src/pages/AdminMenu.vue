@@ -38,14 +38,14 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th>Görsel</th>
-            <th>İsim</th>
-            <th>Açıklama</th>
-            <th>Kategori</th>
-            <th>Fiyat</th>
-            <th>Stok</th>
-            <th>Aktif</th>
-            <th>Sil</th>
+            <th>GÖRSEL</th>
+            <th>İSİM</th>
+            <th>AÇIKLAMA</th>
+            <th>KATEGORİ</th>
+            <th>FİYAT</th>
+            <th>STOK</th>
+            <th>AKTİF</th>
+            <th>SİL</th>
           </tr>
         </thead>
 
@@ -452,7 +452,17 @@ onMounted(fetchItems);
 .data-table td:nth-child(3) {
   max-width: 220px;
 }
-
+.data-table td:nth-child(5),
+.data-table th:nth-child(5),
+.data-table td:nth-child(6),
+.data-table th:nth-child(6),
+.data-table td:nth-child(7),
+.data-table th:nth-child(7),
+.data-table td:nth-child(8),
+.data-table th:nth-child(8) {
+  max-width: 60px;
+  text-align: center;
+}
 /* Shared cell text styling */
 .cell-text {
   display: inline-block;

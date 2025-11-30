@@ -31,9 +31,9 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th>İsim</th>
-            <th>Tanımlı Ürün</th>
-            <th>Sil</th>
+            <th>İSİM</th>
+            <th>TANIMLI ÜRÜN</th>
+            <th>SİL</th>
           </tr>
         </thead>
 
@@ -309,7 +309,15 @@ onMounted(async () => {
   width: 100%;
   overflow-x: auto;
 }
-
+.data-table td:nth-child(2),
+.data-table th:nth-child(2) {
+  text-align: center;
+}
+.data-table td:nth-child(3),
+.data-table th:nth-child(3) {
+  max-width: 20px;
+  text-align: center;
+}
 /* Inline edit styling */
 .inline-input {
   width: 100%;
