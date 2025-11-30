@@ -7,7 +7,7 @@
 
       <form @submit.prevent="submit">
         <div class="input-wrapper">
-          <div class="icon"></div>
+          <span class="icon"></span>
           <input
             type="text"
             v-model="fullName"
@@ -17,42 +17,35 @@
         </div>
 
         <div class="input-wrapper">
-          <div class="icon"></div>
+          <span class="icon"></span>
           <input
-            type="text"
+            type="email"
             v-model="username"
             placeholder="E-Posta"
             required
+            autocomplete="email"
           />
         </div>
 
         <div class="input-wrapper">
-          <div class="icon"></div>
-          <input type="text" v-model="phone" placeholder="Telefon" required />
+          <span class="icon"></span>
+          <input type="tel" v-model="phone" placeholder="Telefon" required />
         </div>
 
         <div class="input-wrapper">
-          <div class="icon"></div>
+          <span class="icon"></span>
           <input
             type="password"
             v-model="password"
             placeholder="Şifre"
             required
+            autocomplete="new-password"
           />
         </div>
 
-        <div class="error" v-if="error">{{ error }}</div>
+        <p class="error" v-if="error">{{ error }}</p>
 
-        <button
-          type="submit"
-          :disabled="
-            loading ||
-            fullName.length < 2 ||
-            username.length < 2 ||
-            phone.length < 2 ||
-            password.length < 2
-          "
-        >
+        <button type="submit" :disabled="isDisabled || loading">
           {{ loading ? "Kayıt Yapılıyor..." : "Kayıt Ol" }}
         </button>
       </form>
@@ -61,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import api from "@/config/api";
 import { useRouter } from "vue-router";
 
@@ -75,30 +68,39 @@ const password = ref("");
 const loading = ref(false);
 const error = ref("");
 
+const isDisabled = computed(() => {
+  return (
+    fullName.value.trim().length < 2 ||
+    username.value.trim().length < 5 ||
+    phone.value.trim().length < 5 ||
+    password.value.trim().length < 4
+  );
+});
+
 const submit = async () => {
   loading.value = true;
   error.value = "";
 
   try {
     await api.post(`/auth/register`, {
-      fullName: fullName.value,
-      username: username.value,
+      fullName: fullName.value.trim(),
+      username: username.value.trim(),
       password: password.value,
-      phone: phone.value,
+      phone: phone.value.trim(),
     });
 
     window.$alert(
-      "Kayıt başarılı! Email adresinizden onaylayınız. Spam kutunuzu da kontrol ediniz.",
+      "Kayıt başarılı! Lütfen e-posta adresinizden onaylayınız. Spam kutunuzu da kontrol ediniz.",
       "Başarılı"
     );
     router.push("/login");
   } catch (err) {
-    error.value =
-      err.response?.data?.error || "Kayıt sırasında bir hata oluştu";
-    window.$toast(error.value, "error");
+    const msg = err.response?.data?.error || "Kayıt sırasında bir hata oluştu";
+    error.value = msg;
+    window.$toast?.(msg, "error");
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 };
 </script>
 
@@ -108,26 +110,27 @@ const submit = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100dvh;
+  min-height: 100dvh;
   background: var(--bg-gradient);
+  padding: 1.5rem;
 }
 
 .login-card {
   position: relative;
-  background: #ffffff1f;
-  padding: 2rem 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2.5rem 2.5rem 3rem;
   border-radius: 30px;
   text-align: center;
-  height: 450px;
-  width: 400px;
+  width: 100%;
+  max-width: 420px;
   animation: fadeIn 0.5s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
-  align-content: center;
-  border: 1px solid rgba(249, 247, 244, 0.3);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35),
+    0 4px 10px rgba(255, 255, 255, 0.15) inset;
+  border: 1px solid rgba(255, 255, 255, 0.28);
 }
 
+/* circular logo badge */
 .logo {
   position: absolute;
   top: -75px;
@@ -136,10 +139,13 @@ const submit = async () => {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: var(--espresso);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(255, 255, 255, 0.25);
   overflow: hidden;
 }
+
 .logo img {
   width: 100%;
   height: 100%;
@@ -148,28 +154,32 @@ const submit = async () => {
 
 form {
   margin-top: 3rem;
-  align-content: center;
 }
 
+/* input row */
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.8rem 0;
 }
 
+/* left icon strip */
 .input-wrapper .icon {
   position: absolute;
   left: 0;
   width: 44px;
   height: 100%;
   background: var(--espresso);
+  border-radius: 4px 0 0 4px;
 }
 
+/* inputs */
 .input-wrapper input {
   width: 100%;
   padding: 0.75rem 0.75rem 0.75rem 49px;
   border: 1px solid var(--gold2);
+  border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background: rgba(249, 247, 244, 0.9);
@@ -185,53 +195,57 @@ form {
 /* bottom big button */
 button {
   position: absolute;
-  width: 80%;
-  height: 50px;
-
   left: 50%;
   transform: translateX(-50%);
   bottom: -50px;
-  z-index: -1;
 
-  background: rgba(195, 168, 128, 0.3);
-  backdrop-filter: blur(6px);
+  width: 80%;
+  height: 50px;
 
-  color: rgba(255, 255, 255, 0.88);
-  text-shadow: 0px 0px 6px rgba(201, 162, 39, 0.75);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px) saturate(150%);
 
-  border: none;
-  padding: 0.8rem;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+
   font-weight: 500;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: 3px;
 
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
-  border: 1px solid rgba(249, 247, 244, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
 }
 
 button:hover:not(:disabled) {
-  background: rgba(247, 213, 163, 0.3); /* brighter warm glass */
+  background: rgba(255, 255, 255, 0.23);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
 button:active:not(:disabled) {
-  background: rgba(247, 213, 163, 0.18); /* darker warm glass */
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-50%) translateY(2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
 }
+
 button:disabled {
-  background: rgba(60, 60, 60, 0.66); /* darker warm glass */
-  color: rgba(177, 177, 177, 0.66);
+  background: rgba(200, 200, 200, 0.22);
+  color: rgba(220, 220, 220, 0.8);
   cursor: not-allowed;
-  text-shadow: none;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
 .error {
   color: #c62828;
-  margin-top: 0.8rem;
+  margin-top: 0.6rem;
   font-size: 0.9rem;
 }
 
+/* entrance animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -243,13 +257,23 @@ button:disabled {
   }
 }
 
+/* mobile */
 @media (max-width: 700px) {
   .login-card {
-    transform: translateY(-50);
-    padding: 2rem 2.5rem;
-    height: fit-content;
-    max-width: 400px;
-    width: 90%;
+    padding: 2.3rem 1.9rem 3rem;
+    max-width: 380px;
+  }
+
+  .logo {
+    width: 130px;
+    height: 130px;
+    top: -65px;
+  }
+
+  button {
+    height: 46px;
+    font-size: 1rem;
+    letter-spacing: 2px;
   }
 }
 </style>

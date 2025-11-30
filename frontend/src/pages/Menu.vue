@@ -55,8 +55,10 @@
           </div>
 
           <div class="menu-info">
-            <h3>{{ item.name }}</h3>
-            <p class="desc">{{ item.description }}</p>
+            <div>
+              <h3>{{ item.name }}</h3>
+              <p class="desc">{{ item.description }}</p>
+            </div>
 
             <div class="price-row">
               <span class="price">{{ item.price }}₺</span>
@@ -100,29 +102,71 @@
   margin-bottom: 2rem;
 }
 
+/* Main "MENÜ" title */
 .menu-header h1 {
-  font-size: 2rem;
-  color: var(--espresso);
-  letter-spacing: 1px;
-  margin-bottom: 0.5rem;
+  font-family: "Playfair Display", "Raleway", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
   font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  margin-bottom: 0.6rem;
+  position: relative;
+  display: inline-block;
+  padding-inline: 0.4em;
 }
 
+/* Gold underline accent under MENÜ */
+.menu-header h1::after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: -0.4rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Tagline under title */
 .tagline {
-  color: rgba(62, 44, 39, 0.6);
-  font-size: 1rem;
+  font-family: var(--font-body);
   font-style: italic;
-  margin-bottom: 1.5rem;
+  color: rgba(62, 44, 39, 0.7);
+  font-size: 0.95rem;
+  margin-top: 0.8rem;
+  margin-bottom: 1.8rem;
 }
 
+/* Optional “quote” styling around tagline text */
+.tagline::before,
+.tagline::after {
+  font-style: normal;
+  color: rgba(62, 44, 39, 0.45);
+}
+
+.tagline::before {
+  content: "“";
+  margin-right: 0.15rem;
+}
+
+.tagline::after {
+  content: "”";
+  margin-left: 0.15rem;
+}
 /* Category scroll */
 .category-scroll {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  padding: 0.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(164, 126, 59, 0.18);
+  justify-content: flex-start;
 }
 
 .category-scroll::-webkit-scrollbar {
@@ -130,12 +174,12 @@
 }
 
 .cat-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: 1px solid rgba(164, 126, 59, 0.25);
-  background: white;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all var(--transition-base);
   color: var(--espresso);
@@ -177,6 +221,8 @@
   overflow: hidden;
   transition: all var(--transition-base);
   border: 1px solid rgba(164, 126, 59, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-card:hover:not(.disabled) {
@@ -235,6 +281,10 @@
 /* Card content */
 .menu-info {
   padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .menu-info h3 {

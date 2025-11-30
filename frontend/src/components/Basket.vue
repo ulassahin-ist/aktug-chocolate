@@ -1,7 +1,14 @@
 <template>
   <!-- 🛒 Floating Basket Button - Premium Design -->
-  <div v-if="itemCount > 0" class="basket-float" @click="open = true">
-    <Icons name="shopping-cart" :size="22" color="var(--cream)" />
+  <div
+    v-if="itemCount > 0"
+    class="basket-float"
+    :class="{ pulse: isPulsing }"
+    @click="open = true"
+    role="button"
+    aria-label="Sepeti aç"
+  >
+    <Icons name="shopping-cart" :size="24" color="var(--cream)" />
     <span class="basket-float-count">{{ itemCount }}</span>
   </div>
 
@@ -18,7 +25,13 @@
 
         <div class="basket-content">
           <div v-for="item in items" :key="item.id" class="basket-item">
-            <img :src="API_BASE + item.photo" class="basket-item-img" alt="" />
+            <img
+              :src="
+                item.photo ? API_BASE + item.photo : '/menu-placeholder.png'
+              "
+              class="basket-item-img"
+              alt=""
+            />
 
             <div class="basket-item-details">
               <h4>{{ item.name }}</h4>
@@ -62,10 +75,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import { useGlobal } from "@/composables";
 import Icons from "./Icons.vue";
+import { API_BASE } from "@/config/api";
 
 const {
   items,
@@ -79,9 +93,34 @@ const {
 } = useGlobal();
 
 const router = useRouter();
-import { API_BASE } from "@/config/api";
 
 const open = ref(false);
+
+/* 🔔 Pulse state for floating basket */
+const isPulsing = ref(false);
+let pulseTimeoutId = null;
+
+watch(
+  itemCount,
+  (newVal, oldVal) => {
+    // Pulse when count increases and is > 0
+    if (newVal > 0 && newVal > (oldVal ?? 0)) {
+      if (pulseTimeoutId) {
+        clearTimeout(pulseTimeoutId);
+      }
+      isPulsing.value = true;
+      pulseTimeoutId = setTimeout(() => {
+        isPulsing.value = false;
+        pulseTimeoutId = null;
+      }, 350); // matches CSS animation duration
+    }
+  },
+  { flush: "post" }
+);
+
+onBeforeUnmount(() => {
+  if (pulseTimeoutId) clearTimeout(pulseTimeoutId);
+});
 
 const goCheckout = async () => {
   const status = await validateBasket();
@@ -100,72 +139,75 @@ const goCheckout = async () => {
 /* ============================================
    🛒 FLOATING BASKET BUTTON
    ============================================ */
-
 .basket-float {
   position: fixed;
-  right: 24px;
+  right: 20px;
   bottom: 24px;
   z-index: 9998;
 
-  /* Premium espresso pill */
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+
   background: linear-gradient(135deg, #3e2c27 0%, #2a1f1c 100%);
-  padding: 14px 20px;
-  border-radius: 50px;
-
-  /* Layered shadows for depth */
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.4), 0 8px 24px rgba(62, 44, 39, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(62, 44, 39, 0.4);
 
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* Item count badge */
+/* Count badge now floats on top of the circle */
 .basket-float-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+
   background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
   color: var(--espresso);
-  min-width: 28px;
-  height: 28px;
-  border-radius: 14px;
+
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   font-weight: 700;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(201, 162, 39, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+
+  box-shadow: 0 2px 6px rgba(201, 162, 39, 0.45);
+  text-shadow: none;
 }
 
-/* Hover - elegant lift */
+/* Hover - subtle lift */
 .basket-float:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(62, 44, 39, 0.5),
-    0 16px 40px rgba(62, 44, 39, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(62, 44, 39, 0.55);
 }
 
 /* Active state */
 .basket-float:active {
-  transform: translateY(-2px) scale(1);
+  transform: translateY(-1px);
 }
 
-/* Pulse animation when items added */
+/* Pulse animation when items added (keep your class hook) */
 @keyframes basket-pulse {
   0%,
   100% {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.08);
   }
 }
 
 .basket-float.pulse {
-  animation: basket-pulse 0.4s ease-out;
+  animation: basket-pulse 0.35s ease-out;
 }
 
 /* ============================================
@@ -380,14 +422,15 @@ const goCheckout = async () => {
 @media (max-width: 900px) {
   .basket-float {
     right: 16px;
-    bottom: calc(24px + env(safe-area-inset-bottom, 20px));
-    padding: 12px 18px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 18px));
+    width: 52px;
+    height: 52px;
   }
 
   .basket-float-count {
-    min-width: 26px;
-    height: 26px;
-    font-size: 13px;
+    min-width: 20px;
+    height: 20px;
+    font-size: 11px;
   }
 
   .basket-panel {
@@ -396,6 +439,17 @@ const goCheckout = async () => {
     border-radius: 24px 24px 0 0;
     padding: 1.5rem;
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 20px));
+  }
+  .basket-panel::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(62, 44, 39, 0.18);
   }
 
   @keyframes slideInRight {

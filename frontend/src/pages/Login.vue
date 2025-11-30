@@ -7,7 +7,7 @@
 
       <form @submit.prevent="handleLogin">
         <div class="input-wrapper">
-          <span class="icon"> </span>
+          <span class="icon"></span>
           <input
             v-model="username"
             type="text"
@@ -16,6 +16,7 @@
             autocomplete="username"
           />
         </div>
+
         <div class="input-wrapper">
           <span class="icon"></span>
           <input
@@ -28,6 +29,7 @@
         </div>
 
         <div class="forgot-password">Şifremi Unuttum</div>
+
         <button type="submit" :disabled="loading">
           {{ loading ? "Giriş yapılıyor..." : "GIRIŞ" }}
         </button>
@@ -44,7 +46,6 @@ import { useRouter } from "vue-router";
 import { useGlobal } from "@/composables";
 
 const { isAdmin, login } = useGlobal();
-
 const router = useRouter();
 
 const username = ref("");
@@ -56,9 +57,9 @@ const handleLogin = async () => {
   loading.value = true;
   error.value = "";
 
-  const success = await login(username.value, password.value);
+  const ok = await login(username.value, password.value);
 
-  if (success) {
+  if (ok) {
     if (isAdmin.value) router.push("/admin/orders");
     else router.push("/");
   } else {
@@ -75,24 +76,26 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100dvh; /* mobile-safe height */
   background: var(--bg-gradient);
+  padding: 1.5rem;
 }
 
 .login-card {
   position: relative;
-  background: #ffffff1f;
+  background: rgba(255, 255, 255, 0.15); /* lighter, clearer glass */
   padding: 2rem 2.5rem;
   border-radius: 30px;
   text-align: center;
   height: 350px;
   width: 400px;
+  display: flex;
+  align-items: center;
   animation: fadeIn 0.5s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
-  align-content: center;
-  border: 1px solid rgba(249, 247, 244, 0.3);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35),
+    /* softer downward shadow */ 0 4px 10px rgba(255, 255, 255, 0.15) inset; /* subtle inner glow */
+  border: 1px solid rgba(255, 255, 255, 0.28);
 }
 
 /* circular logo badge */
@@ -104,21 +107,22 @@ const handleLogin = async () => {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: var(--espresso);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(255, 255, 255, 0.25);
   overflow: hidden;
 }
+
 .logo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 form {
-  margin-top: 3rem;
-  align-content: center;
+  width: 100%;
 }
-
+/* input row */
 .input-wrapper {
   position: relative;
   display: flex;
@@ -133,6 +137,7 @@ form {
   width: 44px;
   height: 100%;
   background: var(--espresso);
+  border-radius: 4px 0 0 4px;
 }
 
 /* inputs */
@@ -140,6 +145,7 @@ form {
   width: 100%;
   padding: 0.75rem 0.75rem 0.75rem 49px;
   border: 1px solid var(--gold2);
+  border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   background: rgba(249, 247, 244, 0.9);
@@ -154,53 +160,57 @@ form {
 
 .forgot-password {
   text-align: right;
-  color: rgba(249, 247, 244, 0.85);
+  color: var(--espresso);
   font-size: 0.9rem;
-  margin-top: 3rem;
+  margin-top: 0.5rem;
   cursor: pointer;
 }
 
 /* bottom big button */
 button {
   position: absolute;
-  width: 80%;
-  height: 50px;
-
   left: 50%;
   transform: translateX(-50%);
   bottom: -50px;
-  z-index: -1;
 
-  background: rgba(195, 168, 128, 0.3);
-  backdrop-filter: blur(6px);
+  width: 80%;
+  height: 50px;
 
-  color: rgba(255, 255, 255, 0.88);
-  text-shadow: 0px 0px 6px rgba(201, 162, 39, 0.75);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px) saturate(150%);
 
-  border: none;
-  padding: 0.8rem;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+
   font-weight: 500;
   cursor: pointer;
   font-size: 1.1rem;
   letter-spacing: 3px;
 
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
-  border: 1px solid rgba(249, 247, 244, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
 }
 
 button:hover:not(:disabled) {
-  background: rgba(247, 213, 163, 0.3); /* brighter warm glass */
+  background: rgba(255, 255, 255, 0.23);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
 button:active:not(:disabled) {
-  background: rgba(247, 213, 163, 0.18); /* darker warm glass */
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-50%) translateY(2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
 }
+
 button:disabled {
-  background: rgba(60, 60, 60, 0.66); /* darker warm glass */
-  color: rgba(177, 177, 177, 0.66);
+  background: rgba(200, 200, 200, 0.18);
+  color: rgba(220, 220, 220, 0.7);
   cursor: not-allowed;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
 
 .error {
@@ -220,13 +230,23 @@ button:disabled {
   }
 }
 
+/* mobile */
 @media (max-width: 700px) {
   .login-card {
-    transform: translateY(-70px);
-    padding: 2rem 2.5rem;
-    height: 300px;
-    max-width: 400px;
-    width: 90%;
+    padding: 2rem 1.75rem;
+    max-width: 360px;
+  }
+
+  .logo {
+    width: 130px;
+    height: 130px;
+    top: -65px;
+  }
+
+  button {
+    height: 46px;
+    font-size: 1rem;
+    letter-spacing: 2px;
   }
 }
 </style>

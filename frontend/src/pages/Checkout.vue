@@ -82,6 +82,9 @@ const submitOrder = async () => {
     return;
   }
 
+  // Prevent double clicks
+  if (loading.value) return;
+
   // Empty basket
   if (!items.value.length) {
     window.$toast("Sepet boş!", "error");
@@ -96,14 +99,13 @@ const submitOrder = async () => {
 
   loading.value = true;
 
-  const valid = await validateBasket();
-  if (valid === "UPDATED") {
-    window.$toast("Sepet güncellendi — stok değişti!", "warning");
-    loading.value = false;
-    return;
-  }
-
   try {
+    const valid = await validateBasket();
+    if (valid === "UPDATED") {
+      window.$toast("Sepet güncellendi — stok değişti!", "warning");
+      return;
+    }
+
     const branch = getBranchId();
 
     await api.post(`/orders/create`, {
@@ -120,9 +122,9 @@ const submitOrder = async () => {
   } catch (err) {
     const errMsg = err.response?.data?.error || "Sipariş oluşturulamadı.";
     window.$toast(errMsg, "error");
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 };
 </script>
 
@@ -130,22 +132,41 @@ const submitOrder = async () => {
 .checkout-container {
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-body);
   background: var(--cream);
   height: calc(100dvh - var(--scroll-offset));
   color: var(--espresso);
-  max-width: 1500px;
+  max-width: 1200px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
+/* Page title */
 .title {
   text-align: center;
+  font-family: var(--font-heading);
   font-size: 2.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   margin-bottom: 1.5rem;
   color: var(--espresso);
   flex-shrink: 0;
+  position: relative;
+  display: inline-block;
+  align-self: center;
+  padding-inline: 0.4em;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -0.45rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
 /* Empty state */
@@ -154,39 +175,41 @@ const submitOrder = async () => {
   background: white;
   border-radius: 16px;
   padding: 3rem 2rem;
-  box-shadow: 0 5px 15px rgba(62, 44, 39, 0.12);
-  border: 1px solid var(--gold2);
-  max-width: 400px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(164, 126, 59, 0.35);
+  max-width: 420px;
   margin: 2rem auto;
 }
 
 .empty-box p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--espresso);
   margin-bottom: 1.5rem;
 }
 
 .back-btn {
   display: inline-block;
-  background: var(--gold);
-  color: white;
+  background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+  color: var(--espresso);
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
+  font-size: 0.95rem;
   box-shadow: 0 2px 6px rgba(201, 162, 39, 0.4);
-  transition: 0.2s;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .back-btn:hover {
-  background: var(--gold2);
-  box-shadow: 0 3px 8px rgba(164, 126, 59, 0.45);
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(164, 126, 59, 0.5);
 }
 
 /* Main Checkout Grid */
 .checkout-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 2rem;
   align-items: stretch;
   width: 100%;
@@ -200,8 +223,8 @@ const submitOrder = async () => {
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.1);
-  border: 1px solid var(--gold2);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(164, 126, 59, 0.25);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -214,8 +237,12 @@ const submitOrder = async () => {
   color: var(--espresso);
   text-align: center;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--highlight);
+  border-bottom: 2px solid rgba(164, 126, 59, 0.18);
   flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .scroll-wrapper {
@@ -227,12 +254,25 @@ const submitOrder = async () => {
   -webkit-overflow-scrolling: touch;
 }
 
+.scroll-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-wrapper::-webkit-scrollbar-thumb {
+  background: var(--gold2);
+  border-radius: 6px;
+}
+
+/* Cart item rows */
 .item-row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid var(--highlight);
+  border-bottom: 1px solid rgba(247, 213, 163, 0.7);
+}
+
+.item-row:last-child {
+  border-bottom: none;
 }
 
 .thumb {
@@ -258,6 +298,7 @@ const submitOrder = async () => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 .qty {
@@ -266,21 +307,23 @@ const submitOrder = async () => {
 }
 
 .price {
-  font-weight: bold;
+  font-weight: 700;
   color: var(--espresso);
   white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 /* Total line */
 .total-line {
   flex-shrink: 0;
-  background: white;
-  border-top: 2px solid var(--highlight);
-  padding: 1rem 0;
+  background: linear-gradient(135deg, #fef9f0 0%, #fdfaf6 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(164, 126, 59, 0.25);
+  padding: 0.9rem 1rem;
   margin-top: 1rem;
   display: flex;
   justify-content: space-between;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--espresso);
 }
 
@@ -288,9 +331,9 @@ const submitOrder = async () => {
 .form-box {
   background: white;
   border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.1);
-  border: 1px solid var(--gold2);
+  padding: 1.75rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(164, 126, 59, 0.25);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -304,42 +347,46 @@ const submitOrder = async () => {
   gap: 0.5rem;
 }
 
-label {
+.notes-field label {
   font-weight: 600;
   color: var(--espresso);
   font-size: 0.95rem;
+  letter-spacing: 0.03em;
 }
 
-input,
 textarea {
   width: 100%;
-  border-radius: 8px;
-  border: 1px solid var(--gold2);
-  padding: 0.75rem;
-  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(164, 126, 59, 0.6);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.95rem;
   font-family: inherit;
   outline: none;
   background: var(--cream);
   color: var(--espresso);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  min-height: 100px;
+  resize: vertical;
 }
 
-input:disabled {
-  background: var(--highlight);
-  cursor: not-allowed;
-  opacity: 0.7;
+textarea::placeholder {
+  color: rgba(62, 44, 39, 0.45);
 }
 
-input:focus,
 textarea:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+  background: #fefdfb;
 }
 
-textarea {
-  min-height: 100px;
-  resize: vertical;
-  font-family: inherit;
+.btn-primary {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.btn-primary[disabled] {
+  opacity: 0.7;
 }
 
 /* Mobile responsive */
@@ -351,7 +398,7 @@ textarea {
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
     margin-bottom: 1rem;
   }
 
@@ -375,11 +422,6 @@ textarea {
     max-height: 40vh;
   }
 
-  .form-box {
-    position: sticky;
-    bottom: 0;
-  }
-
   .thumb {
     width: 50px;
     height: 50px;
@@ -396,18 +438,20 @@ textarea {
   }
 
   .total-line {
-    margin-top: 0;
-    font-size: 1.1rem;
-    padding: 0.75rem 0;
-    padding-bottom: 0;
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+    padding: 0.75rem 0.9rem;
   }
 
   .form-box {
     padding: 1.25rem;
+    position: sticky;
+    bottom: 0;
+    box-shadow: 0 -4px 18px rgba(62, 44, 39, 0.18);
   }
 
   textarea {
-    min-height: 60px;
+    min-height: 70px;
   }
 
   .empty-box {
@@ -435,15 +479,18 @@ textarea {
     height: 45px;
     min-width: 45px;
   }
+
   .summary-box h2 {
-    margin-bottom: 0rem;
+    margin-bottom: 0.25rem;
   }
+
   .summary-box {
-    padding: 0.5rem;
+    padding: 0.85rem;
   }
+
   .form-box {
-    padding: 0.5rem;
-    gap: 0.5rem;
+    padding: 0.85rem;
+    gap: 0.75rem;
   }
 }
 </style>

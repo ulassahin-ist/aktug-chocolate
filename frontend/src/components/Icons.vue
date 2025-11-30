@@ -14,7 +14,11 @@
     stroke-linecap="round"
     stroke-linejoin="round"
     :class="['icon', className]"
+    role="img"
+    :aria-label="title || name"
+    focusable="false"
   >
+    <title v-if="title">{{ title }}</title>
     <component :is="iconComponent" />
   </svg>
 </template>
@@ -22,31 +26,15 @@
 <script setup>
 import { computed, defineAsyncComponent, h } from "vue";
 
+//prettier-ignore
 const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  size: {
-    type: [String, Number],
-    default: 24,
-  },
-  color: {
-    type: String,
-    default: "currentColor",
-  },
-  strokeWidth: {
-    type: [String, Number],
-    default: 2,
-  },
-  filled: {
-    type: Boolean,
-    default: false,
-  },
-  className: {
-    type: String,
-    default: "",
-  },
+  name: { type: String, required: true },
+  size: { type: [String, Number], default: 24 },
+  color: { type: String, default: "currentColor" },
+  strokeWidth: { type: [String, Number], default: 2 },
+  filled: { type: Boolean, default: false },
+  className: { type: String, default: "" },
+  title: { type: String, default: "" },
 });
 
 // Icon path definitions (using Heroicons-style paths)
@@ -229,11 +217,13 @@ const icons = {
 
 const iconComponent = computed(() => {
   const iconDef = icons[props.name];
-  return iconDef
-    ? iconDef()
-    : h("path", {
-        d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
-      });
+
+  const fallback = () =>
+    h("path", {
+      d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+    });
+
+  return iconDef || fallback;
 });
 
 const viewBox = computed(() => "0 0 24 24");
@@ -243,10 +233,11 @@ const viewBox = computed(() => "0 0 24 24");
 .icon {
   display: inline-block;
   vertical-align: middle;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
 .icon:hover {
-  opacity: 0.8;
+  opacity: 0.85;
+  transform: translateY(-1px);
 }
 </style>

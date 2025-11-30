@@ -48,13 +48,14 @@ watch(
 .admin-tabs {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: 20px auto;
-  padding: 16px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 1.5rem auto;
+  padding: 1.25rem 1.5rem;
   background: var(--cream);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(62, 44, 39, 0.1);
-  height: calc(100dvh - var(--scroll-offset) - 40px);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  height: calc(100dvh - var(--scroll-offset) - 3rem);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -63,39 +64,74 @@ watch(
 .tabs {
   flex-shrink: 0;
   display: flex;
-  gap: 0.6rem;
-  border-bottom: 2px solid var(--gold2);
-  padding-bottom: 0;
+  gap: 0.5rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(164, 126, 59, 0.35);
   overflow-x: auto;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-top: 2px;
+}
+
+.tabs::-webkit-scrollbar {
+  height: 4px;
+}
+.tabs::-webkit-scrollbar-thumb {
+  background: var(--gold2);
+  border-radius: 999px;
+}
+.tabs::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* INDIVIDUAL TAB */
 .tab {
   text-decoration: none;
   color: var(--espresso);
+  font-family: var(--font-heading);
   font-weight: 500;
-  padding: 0.6rem 1rem;
-  border-radius: 8px 8px 0 0;
-  transition: 0.2s ease;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease,
+    transform 0.18s ease;
   background: transparent;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 /* Hover state */
 .tab:hover {
-  background: var(--beige);
+  background: rgba(247, 213, 163, 0.35);
   color: var(--espresso);
-  border-color: var(--gold2);
+  border-color: rgba(164, 126, 59, 0.45);
+  transform: translateY(-1px);
 }
 
 /* Active tab state */
 .tab.active {
-  background: var(--gold);
-  color: white;
+  background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+  color: var(--espresso);
   font-weight: 600;
   border-color: var(--gold2);
-  box-shadow: 0 -2px 6px rgba(62, 44, 39, 0.1);
+  box-shadow: 0 2px 8px rgba(201, 162, 39, 0.4);
+  position: relative;
+}
+
+/* Small underline accent on active tab */
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -4px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
 /* CONTENT AREA */
@@ -104,31 +140,61 @@ watch(
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 45px;
+  padding: 1.5rem;
+  margin-top: 0.5rem;
   background: var(--cream-light);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
   height: 100%;
   box-shadow: inset 0 0 10px rgba(62, 44, 39, 0.05);
 }
+
+/* Let inner admin pages scroll, not the outer shell */
+.tab-content > * {
+  min-height: 0;
+}
+
+/* =============== 📱 MOBILE =============== */
 @media (max-width: 700px) {
-  .tab-content {
-    padding: 5px;
-  }
   .admin-tabs {
     width: 100%;
     margin: 0;
-    padding: 16px 2px;
-    height: calc(100dvh - var(--scroll-offset)); /* ✅ Changed */
+    padding: 0.75rem 0.5rem;
+    height: calc(100dvh - var(--scroll-offset));
+    border-radius: 0;
+    box-shadow: none;
   }
+
+  .tabs {
+    padding: 0.25rem 0.25rem 0.5rem;
+    gap: 0.4rem;
+  }
+
   .tab {
-    padding: 6px 6px;
-    font-size: 13px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.78rem;
   }
+
   .tab-content {
-    padding: 15px 2px;
-    padding-bottom: calc(
-      15px + env(safe-area-inset-bottom, 20px)
-    ); /* ✅ Added */
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 16px));
+  }
+}
+
+/* Ultra small devices */
+@media (max-width: 400px) {
+  .tabs {
+    gap: 0.3rem;
+  }
+
+  .tab {
+    padding: 0.4rem 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .tab-content {
+    padding: 0.6rem;
   }
 }
 </style>

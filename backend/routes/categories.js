@@ -57,7 +57,43 @@ router.get("/", verifyToken, authorizeRoles("admin"), async (req, res) => {
     res.status(500).json({ error: "Failed to fetch categories" });
   }
 });
+router.get(
+  "/uncategorized-count",
+  verifyToken,
+  authorizeRoles("admin"), // or ("staff","admin") if you want staff to see it too
+  async (req, res) => {
+    try {
+      const pool = getPool();
 
+      // Reuse the same logic style as other routes
+      const branchId = req.query?.branchId || req.user?.branchId || null;
+
+      if (!branchId) {
+        return res
+          .status(400)
+          .json({ error: "Branch ID is required for uncategorized count." });
+      }
+
+      const [rows] = await pool.query(
+        `
+        SELECT COUNT(*) AS cnt
+        FROM MenuItems
+        WHERE branchId = ?
+          AND (categoryId IS NULL OR categoryId = 0)
+      `,
+        [branchId]
+      );
+
+      const count = Number(rows[0]?.cnt || 0);
+      res.json({ count });
+    } catch (err) {
+      console.error("❌ GET /categories/uncategorized-count error:", err);
+      res
+        .status(500)
+        .json({ error: "Failed to fetch uncategorized item count." });
+    }
+  }
+);
 // 🔹 Reorder categories (admin only)
 router.post(
   "/reorder",

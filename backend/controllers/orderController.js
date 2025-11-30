@@ -8,30 +8,90 @@ exports.getCompletedOrders = async (req, res) => {
   try {
     const pool = getPool();
     const isAdmin = req.user?.role === "admin";
-    const branchId = req.user?.branchId || null;
+    const userBranchId = req.user?.branchId || null;
 
-    let sql = `SELECT * FROM Orders WHERE active = 0`;
+    // 🔹 Pagination params
+    let page = parseInt(req.query.page, 10) || 1;
+    let perPage = parseInt(req.query.perPage, 10) || 50;
+
+    if (page < 1) page = 1;
+    if (perPage < 1) perPage = 1;
+    if (perPage > 500) perPage = 500; // hard cap
+
+    const offset = (page - 1) * perPage;
+
+    // 🔹 Date filters
+    const startDate = req.query.startDate || null; // "YYYY-MM-DD"
+    const endDate = req.query.endDate || null; // "YYYY-MM-DD"
+
+    // Base WHERE
+    let where = "WHERE active = 0";
     const params = [];
 
+    // Branch scoping
     if (!isAdmin) {
-      if (!branchId) {
+      if (!userBranchId) {
         return res
           .status(400)
           .json({ error: "Branch ID missing in user session." });
       }
-      sql += ` AND branchId = ?`;
-      params.push(branchId);
+      where += " AND branchId = ?";
+      params.push(userBranchId);
     }
 
-    sql += ` ORDER BY orderTime DESC`;
-
-    const [orders] = await pool.query(sql, params);
-
-    if (orders.length === 0) {
-      return res.json([]);
+    // Date range (inclusive)
+    if (startDate) {
+      where += " AND orderTime >= ?";
+      params.push(`${startDate} 00:00:00`);
+    }
+    if (endDate) {
+      where += " AND orderTime <= ?";
+      params.push(`${endDate} 23:59:59`);
     }
 
+    // 1) 🔢 Total count + total amount for this filter
+    const countSql = `
+      SELECT 
+        COUNT(*) AS cnt,
+        COALESCE(SUM(total), 0) AS totalAmount
+      FROM Orders
+      ${where}
+    `;
+    const [countRows] = await pool.query(countSql, params);
+    const totalCount = Number(countRows[0]?.cnt || 0);
+    const totalAmount = Number(countRows[0]?.totalAmount || 0);
+
+    if (totalCount === 0) {
+      return res.json({
+        orders: [],
+        totalCount: 0,
+        totalAmount: 0,
+      });
+    }
+
+    // 2) 📄 Fetch only current page
+    const listSql = `
+      SELECT *
+      FROM Orders
+      ${where}
+      ORDER BY orderTime DESC
+      LIMIT ? OFFSET ?
+    `;
+    const listParams = [...params, perPage, offset];
+    const [orders] = await pool.query(listSql, listParams);
+
+    if (!orders.length) {
+      // Page beyond last page (e.g. filter shrank), return empty but keep totals
+      return res.json({
+        orders: [],
+        totalCount,
+        totalAmount,
+      });
+    }
+
+    // 3) 🍫 Load items only for these orders
     const orderIds = orders.map((o) => o.id);
+
     const [items] = await pool.query(
       `
       SELECT 
@@ -65,13 +125,16 @@ exports.getCompletedOrders = async (req, res) => {
       items: itemsByOrder[o.id] || [],
     }));
 
-    res.json(formatted);
+    res.json({
+      orders: formatted,
+      totalCount,
+      totalAmount,
+    });
   } catch (err) {
     console.error("getCompletedOrders error:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
-
 /**
  * POST /api/orders/create
  * ✅ Uses tableId only (tableNumber removed)

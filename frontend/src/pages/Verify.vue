@@ -1,28 +1,36 @@
 <template>
   <div class="verify-page">
     <div class="verify-card">
-      <!-- Loading State -->
+      <!-- ⏳ Loading State -->
       <div v-if="loading" class="loading-state">
-        <div class="loading-spinner"></div>
+        <div class="loading-spinner" aria-hidden="true"></div>
         <h2>Doğrulanıyor...</h2>
-        <p>Lütfen bekleyin</p>
+        <p>Lütfen birkaç saniye bekleyin.</p>
       </div>
 
-      <!-- Success State -->
+      <!-- ✅ Success State -->
       <div v-else-if="success" class="success-state">
-        <div class="icon-circle success">✓</div>
+        <div class="icon-circle success" aria-hidden="true">✓</div>
         <h1>Başarılı!</h1>
         <p class="message">
           E-posta adresiniz başarıyla doğrulandı. Artık giriş yapabilirsiniz.
         </p>
+
+        <p v-if="redirectCountdown > 0" class="hint">
+          <strong>{{ redirectCountdown }}</strong> saniye içinde otomatik olarak
+          giriş sayfasına yönlendirileceksiniz.
+        </p>
+
         <button class="action-btn" @click="goToLogin">Giriş Yap</button>
       </div>
 
-      <!-- Error State -->
+      <!-- ❌ Error State -->
       <div v-else class="error-state">
-        <div class="icon-circle error">✕</div>
+        <div class="icon-circle error" aria-hidden="true">✕</div>
         <h1>Doğrulama Başarısız</h1>
-        <p class="message">{{ errorMessage }}</p>
+        <p class="message">
+          {{ errorMessage }}
+        </p>
         <div class="action-buttons">
           <button class="action-btn secondary" @click="goToRegister">
             Tekrar Kayıt Ol
@@ -35,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import api from "@/config/api";
 
@@ -45,12 +53,28 @@ const router = useRouter();
 const loading = ref(true);
 const success = ref(false);
 const errorMessage = ref("");
+const redirectCountdown = ref(0);
+let countdownTimer = null;
+
+const startRedirectCountdown = () => {
+  redirectCountdown.value = 5; // seconds
+  countdownTimer = setInterval(() => {
+    if (redirectCountdown.value <= 1) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+      goToLogin();
+    } else {
+      redirectCountdown.value -= 1;
+    }
+  }, 1000);
+};
 
 onMounted(async () => {
   const token = route.query.token;
 
   if (!token) {
     loading.value = false;
+    success.value = false;
     errorMessage.value = "Doğrulama token'ı bulunamadı.";
     return;
   }
@@ -60,11 +84,20 @@ onMounted(async () => {
       params: { token },
     });
 
-    if (res.data.success) {
+    if (res.data?.success) {
       success.value = true;
-      window.$toast?.(res.data.message, "success");
+      errorMessage.value = "";
+      window.$toast?.(res.data.message || "E-posta doğrulandı.", "success");
+      startRedirectCountdown();
+    } else {
+      success.value = false;
+      errorMessage.value =
+        res.data?.error ||
+        "Doğrulama başarısız. Lütfen bağlantıyı tekrar kontrol edin.";
+      window.$toast?.(errorMessage.value, "error");
     }
   } catch (err) {
+    success.value = false;
     const msg =
       err.response?.data?.error ||
       "Doğrulama sırasında bir hata oluştu. Lütfen tekrar deneyin.";
@@ -72,6 +105,13 @@ onMounted(async () => {
     window.$toast?.(msg, "error");
   } finally {
     loading.value = false;
+  }
+});
+
+onBeforeUnmount(() => {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
   }
 });
 
@@ -112,7 +152,7 @@ const goToHome = () => router.push("/");
   }
 }
 
-/* Loading State */
+/* ⏳ Loading State */
 .loading-state {
   padding: 20px;
 }
@@ -174,7 +214,13 @@ h1 {
   color: rgba(62, 44, 39, 0.8);
   font-size: 1.1rem;
   line-height: 1.6;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
+}
+
+.hint {
+  font-size: 0.95rem;
+  color: rgba(62, 44, 39, 0.7);
+  margin-bottom: 30px;
 }
 
 /* Buttons */

@@ -1,21 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;700&family=Manrope:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap");
 
+/* ============================================
+   🌱 ROOT / TOKENS
+   ============================================ */
 :root {
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Light UI only (no fake dark) */
+  color-scheme: light;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* ============================================
-     🎨 COLOR PALETTE
-     ============================================ */
+  /* 🎨 COLOR PALETTE */
   --espresso: #3e2c27;
   --espresso-light: #4a342e;
   --espresso-dark: #2a1f1c;
@@ -30,15 +30,17 @@
 
   --bg-gradient: radial-gradient(
     circle at top,
-    rgba(249, 247, 244, 0.2) 0%,
-    rgba(247, 213, 163, 0.9) 35%,
-    rgba(62, 44, 39, 1) 90%
+    rgba(249, 247, 244, 0.85) 0%,
+    rgba(247, 213, 163, 0.4) 40%,
+    rgba(62, 44, 39, 0.05) 100%
   );
 
   /* Typography */
-  --font-heading: "Raleway", sans-serif;
-  --font-body: "Manrope", sans-serif;
-  --font-accent: "Plus Jakarta Sans", sans-serif;
+  --font-heading: "Raleway", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  --font-body: "Manrope", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  --font-accent: var(--font-body);
 
   /* Shadows - Premium layered shadows */
   --shadow-sm: 0 2px 8px rgba(62, 44, 39, 0.08);
@@ -85,16 +87,21 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 16px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 *:focus {
-  outline: none !important;
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+html {
+  font-size: 15px;
 }
 
 html,
@@ -103,9 +110,10 @@ body {
 }
 
 body {
-  background-color: var(--cream);
+  background: var(--bg-gradient);
   color: var(--espresso);
   font-family: var(--font-body);
+  line-height: 1.7;
   margin: 0;
   padding: 0;
   max-width: 100vw;
@@ -116,7 +124,7 @@ body {
 }
 
 #app {
-  background-color: var(--cream);
+  background-color: transparent;
   color: var(--espresso);
   font-family: var(--font-body);
   margin: 0;
@@ -135,6 +143,20 @@ select {
   pointer-events: auto;
 }
 
+/* Make text copyable (but not everything) */
+p,
+span,
+td,
+th,
+label,
+.input,
+textarea,
+.form-input,
+.form-textarea {
+  user-select: text;
+}
+
+/* Typography */
 h1,
 h2,
 h3,
@@ -143,34 +165,51 @@ h5,
 h6 {
   font-family: var(--font-heading);
   color: var(--espresso);
-  font-weight: 600;
   line-height: 1.2;
 }
 
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
 h1 {
-  font-size: 2rem;
-  letter-spacing: 0.5px;
+  font-size: 2.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 h2 {
-  font-size: 1.5rem;
-  letter-spacing: 0.8px;
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
 }
 h3 {
-  font-size: 1.25rem;
-  letter-spacing: 0.5px;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
 }
 h4 {
   font-size: 1.1rem;
+  letter-spacing: 0.02em;
 }
 
 p {
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  transition: var(--transition-base);
+  transition: color var(--transition-base), opacity var(--transition-base);
+}
+
+a:hover {
+  opacity: 0.85;
 }
 
 button {
@@ -178,10 +217,11 @@ button {
   cursor: pointer;
   transition: all var(--transition-base);
   font-weight: 500;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.03em;
   position: relative;
   overflow: hidden;
   border: none;
+  font-size: 0.95rem;
 }
 
 /* ============================================
@@ -222,14 +262,14 @@ button {
 
 /* Primary Button - Premium Gold */
 .btn-primary {
-  background: linear-gradient(135deg, #d4af37 0%, #c9a227 50%, #a47e3b 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #c9a227 60%, #b58b3a 100%);
   color: var(--espresso);
   padding: 0.75rem 1.75rem;
   border-radius: var(--border-radius-md);
-  font-size: 15px;
+  font-size: 0.95rem;
   font-weight: 600;
   box-shadow: var(--shadow-gold);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+  text-shadow: none;
   border: none;
   cursor: pointer;
   transition: all var(--transition-base);
@@ -246,7 +286,7 @@ button {
   background: linear-gradient(
     135deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.14) 50%,
     transparent 100%
   );
   opacity: 0;
@@ -257,7 +297,7 @@ button {
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-gold-hover);
-  background: linear-gradient(135deg, #e0c050 0%, #d4af37 50%, #c9a227 100%);
+  background: linear-gradient(135deg, #e0c050 0%, #d4af37 60%, #c9a227 100%);
 }
 
 .btn-primary:hover:not(:disabled)::before {
@@ -283,10 +323,8 @@ button {
 .btn-secondary {
   background: white;
   color: var(--espresso);
-  padding: 0.75rem 1.75rem;
   border: 2px solid var(--gold2);
   border-radius: var(--border-radius-md);
-  font-size: 15px;
   font-weight: 600;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
@@ -294,6 +332,8 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -315,10 +355,11 @@ button {
   text-shadow: none;
   opacity: 0.6;
 }
+
 /* Small Button Variant */
 .btn-sm {
   padding: 0.5rem 1.25rem;
-  font-size: 14px;
+  font-size: 0.85rem;
   border-radius: var(--border-radius-sm);
 }
 
@@ -393,7 +434,7 @@ button {
 .btn-add:hover:not(:disabled) {
   background: linear-gradient(135deg, #e0c050 0%, #d4af37 100%);
   box-shadow: 0 3px 8px rgba(201, 162, 39, 0.5);
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .btn-add:active:not(:disabled) {
@@ -430,11 +471,11 @@ button {
 
 .data-table th {
   padding: 1rem 0.75rem;
-  text-align: center;
+  text-align: left;
   color: var(--cream);
   font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   border-bottom: 2px solid var(--gold2);
   position: relative;
@@ -470,14 +511,14 @@ button {
 .data-table tbody tr:hover {
   background: linear-gradient(90deg, #fef9f0 0%, #fef5e7 100%);
   box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.2);
-  transform: scale(1.002);
+  transform: translateY(-1px);
 }
 
 .data-table td {
   padding: 0.875rem 0.75rem;
-  text-align: center;
+  text-align: left;
   color: var(--espresso);
-  font-size: 14px;
+  font-size: 0.9rem;
   vertical-align: middle;
 }
 
@@ -492,7 +533,7 @@ button {
   border: 1px solid var(--gold2);
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 0.9rem;
   min-width: 60px;
   width: 100%;
   background: var(--cream);
@@ -607,7 +648,7 @@ button {
   color: var(--espresso);
   padding: 6px 12px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 0.8rem;
   font-weight: 500;
   border: 1px solid rgba(164, 126, 59, 0.2);
   white-space: nowrap;
@@ -616,7 +657,7 @@ button {
 }
 
 .item-pill:hover {
-  background: linear-gradient(135deg, #fef5e7 0%, #fed 100%);
+  background: linear-gradient(135deg, #fef5e7 0%, #ffeedf 100%);
   border-color: var(--gold2);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
@@ -633,7 +674,7 @@ button {
   padding: 0.875rem 1rem;
   border: 2px solid rgba(164, 126, 59, 0.2);
   border-radius: var(--border-radius-md);
-  font-size: 15px;
+  font-size: 0.95rem;
   font-family: inherit;
   background: white;
   color: var(--espresso);
@@ -686,9 +727,9 @@ button {
   display: block;
   font-weight: 600;
   color: var(--espresso);
-  font-size: 14px;
+  font-size: 0.9rem;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.03em;
 }
 
 /* Form groups */
@@ -706,9 +747,9 @@ button {
   gap: 4px;
   padding: 4px 12px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.03em;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
   white-space: nowrap;
@@ -748,14 +789,14 @@ button {
   background: white;
   border-radius: var(--border-radius-xl);
   padding: 2rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   border: 1px solid rgba(164, 126, 59, 0.15);
   transition: all var(--transition-base);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .card-header {
@@ -780,10 +821,12 @@ button {
 
 .card-title {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--espresso);
   margin: 0;
   font-family: var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .card-body {
@@ -935,7 +978,7 @@ button {
   text-align: center;
   font-weight: 600;
   color: var(--espresso);
-  font-size: 15px;
+  font-size: 0.95rem;
 }
 
 /* ============================================
@@ -952,10 +995,10 @@ button {
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.9rem;
   }
   h2 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
   h3 {
     font-size: 1.1rem;
@@ -965,16 +1008,20 @@ button {
     padding-right: 4px;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .btn-primary {
     padding: 0.65rem 1.5rem;
-    font-size: 14px;
+    font-size: 0.9rem;
+  }
+
+  .btn-secondary {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
   }
 
   .data-table th,
   .data-table td {
     padding: 0.5rem 0.4rem;
-    font-size: 13px;
+    font-size: 0.8rem;
   }
 
   .pills-cell {
@@ -992,7 +1039,7 @@ button {
 
   .pills-cell .item-pill {
     flex: 0 0 auto;
-    font-size: 13px;
+    font-size: 0.8rem;
   }
 
   .card {
@@ -1003,14 +1050,14 @@ button {
   .form-textarea,
   .form-select {
     padding: 0.75rem 0.875rem;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
   .btn-sm {
     padding: 0.45rem 1rem;
-    font-size: 13px;
+    font-size: 0.8rem;
   }
 
   .card {

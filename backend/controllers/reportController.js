@@ -5,14 +5,31 @@ exports.getStats = async (req, res) => {
   try {
     const pool = getPool();
     const isAdmin = req.user?.role === "admin";
-    const branchId = req.user?.branchId || null;
 
-    // Non-admin must have a branch
-    if (!isAdmin && !branchId) {
-      return res
-        .status(400)
-        .json({ error: "Branch ID missing in user session." });
+    // For admins: optional branchId filter via query (?branchId=)
+    // For non-admins: always scoped to their own branchId from token
+    let effectiveBranchId = null;
+
+    if (isAdmin) {
+      // admin can see all branches OR filter by a specific branch
+      effectiveBranchId = req.query.branchId || null;
+    } else {
+      effectiveBranchId = req.user?.branchId || null;
+      if (!effectiveBranchId) {
+        return res
+          .status(400)
+          .json({ error: "Branch ID missing in user session." });
+      }
     }
+
+    // Helper to append branch condition if we have one
+    const addBranchFilter = (sql, params) => {
+      if (effectiveBranchId) {
+        sql += ` AND branchId = ?`;
+        params.push(effectiveBranchId);
+      }
+      return sql;
+    };
 
     // 1) TODAY revenue
     let todaySql = `
@@ -22,10 +39,7 @@ exports.getStats = async (req, res) => {
         AND DATE(orderTime) = CURDATE()
     `;
     const todayParams = [];
-    if (!isAdmin) {
-      todaySql += ` AND branchId = ?`;
-      todayParams.push(branchId);
-    }
+    todaySql = addBranchFilter(todaySql, todayParams);
     const [tRows] = await pool.query(todaySql, todayParams);
     const todayRevenue = Number(tRows[0]?.rev || 0);
 
@@ -38,39 +52,29 @@ exports.getStats = async (req, res) => {
         AND MONTH(orderTime) = MONTH(CURDATE())
     `;
     const monthParams = [];
-    if (!isAdmin) {
-      monthSql += ` AND branchId = ?`;
-      monthParams.push(branchId);
-    }
+    monthSql = addBranchFilter(monthSql, monthParams);
     const [mRows] = await pool.query(monthSql, monthParams);
     const monthRevenue = Number(mRows[0]?.rev || 0);
 
-    // 3) TOTAL revenue (all time, scoped by branch if not admin)
+    // 3) TOTAL revenue (all time)
     let totalRevSql = `
       SELECT COALESCE(SUM(total), 0) AS rev
       FROM Orders
       WHERE active = 0
     `;
     const totalRevParams = [];
-    if (!isAdmin) {
-      totalRevSql += ` AND branchId = ?`;
-      totalRevParams.push(branchId);
-    }
+    totalRevSql = addBranchFilter(totalRevSql, totalRevParams);
     const [totalRRows] = await pool.query(totalRevSql, totalRevParams);
     const totalRevenue = Number(totalRRows[0]?.rev || 0);
 
     // 4) TOTAL orders count
-    let totalOrderSql = `SELECT COUNT(*) AS c FROM Orders`;
+    let totalOrderSql = `SELECT COUNT(*) AS c FROM Orders WHERE 1=1`;
     const totalOrderParams = [];
-    if (!isAdmin) {
-      totalOrderSql += ` WHERE branchId = ?`;
-      totalOrderParams.push(branchId);
-    }
+    totalOrderSql = addBranchFilter(totalOrderSql, totalOrderParams);
     const [oRows] = await pool.query(totalOrderSql, totalOrderParams);
     const totalOrders = Number(oRows[0]?.c || 0);
 
     // 5) WEEKLY revenue (last 7 days, grouped by weekday)
-    // We mimic SQLite's %w (0=Sun..6=Sat) using DAYOFWEEK()-1
     let weeklyRevenue = [];
     try {
       let weeklySql = `
@@ -91,10 +95,7 @@ exports.getStats = async (req, res) => {
           AND orderTime >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
       `;
       const weeklyParams = [];
-      if (!isAdmin) {
-        weeklySql += ` AND branchId = ?`;
-        weeklyParams.push(branchId);
-      }
+      weeklySql = addBranchFilter(weeklySql, weeklyParams);
       weeklySql += `
         GROUP BY dayNum
         ORDER BY dayNum
@@ -108,8 +109,6 @@ exports.getStats = async (req, res) => {
     }
 
     // 6) TOP ITEMS ALL TIME (globalTop)
-    // Admin: across all branches
-    // Others: only within their branch via Orders.branchId
     let topSql = `
       SELECT 
         m.id,
@@ -121,9 +120,9 @@ exports.getStats = async (req, res) => {
       WHERE 1=1
     `;
     const topParams = [];
-    if (!isAdmin) {
+    if (effectiveBranchId) {
       topSql += ` AND o.branchId = ?`;
-      topParams.push(branchId);
+      topParams.push(effectiveBranchId);
     }
     topSql += `
       GROUP BY m.id, m.name
@@ -133,6 +132,51 @@ exports.getStats = async (req, res) => {
     const [topRows] = await pool.query(topSql, topParams);
     const globalTop = topRows || [];
 
+    // 7) ORDER STATUS SUMMARY (derived from `active`, for TODAY)
+    // waiting  = active = 1 (open orders)
+    // served   = active = 0 (closed orders)
+    // cancelled = 0 for now (no schema for this yet)
+    let statusSummary = {
+      waiting: 0,
+      preparing: 0, // reserved for future
+      served: 0,
+      cancelled: 0,
+    };
+
+    try {
+      let statusSql = `
+        SELECT 
+          CASE 
+            WHEN active = 1 THEN 'waiting'
+            WHEN active = 0 THEN 'served'
+          END AS statusKey,
+          COUNT(*) AS cnt
+        FROM Orders
+        WHERE orderTime >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+      `;
+      const statusParams = [];
+
+      if (!isAdmin) {
+        statusSql += ` AND branchId = ?`;
+        statusParams.push(branchId);
+      }
+
+      statusSql += ` GROUP BY statusKey`;
+
+      const [statusRows] = await pool.query(statusSql, statusParams);
+
+      for (const row of statusRows) {
+        if (row.statusKey === "waiting") {
+          statusSummary.waiting = Number(row.cnt || 0);
+        } else if (row.statusKey === "served") {
+          statusSummary.served = Number(row.cnt || 0);
+        }
+      }
+    } catch (err) {
+      console.error("Status summary error:", err);
+      // keep defaults (all zero)
+    }
+
     // Final response
     res.json({
       todayRevenue,
@@ -141,6 +185,7 @@ exports.getStats = async (req, res) => {
       totalOrders,
       weeklyRevenue,
       globalTop,
+      statusSummary,
     });
   } catch (err) {
     console.error("❌ Stats fetch error:", err);

@@ -32,6 +32,15 @@ async function runMigrations(pool) {
       country VARCHAR(100),
       timezone VARCHAR(64) DEFAULT 'Europe/Istanbul',
       currency VARCHAR(8) DEFAULT 'TRY',
+      menuDefaultStock INT NOT NULL DEFAULT 20,
+      menuDefaultPrice DECIMAL(10,2) NOT NULL DEFAULT 400.00,
+      stockWarnEnabled TINYINT(1) NOT NULL DEFAULT 1,
+      stockWarnThreshold INT NOT NULL DEFAULT 5,
+      showInactiveMenuItems TINYINT(1) NOT NULL DEFAULT 0,
+      showOutOfStockItems TINYINT(1) NOT NULL DEFAULT 0,
+      ordersAutoRefreshEnabled TINYINT(1) NOT NULL DEFAULT 1,
+      ordersAutoRefreshSeconds INT NOT NULL DEFAULT 15,
+
       active TINYINT(1) DEFAULT 1,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB;
