@@ -5,19 +5,10 @@ export default {
   namespaced: true,
 
   state: () => ({
-    // Current branch settings (loaded from backend)
     settings: null,
-
-    // Loading state
     loading: false,
-
-    // Error state
     error: null,
-
-    // Last fetch timestamp
     lastFetched: null,
-
-    // Cache duration (5 minutes)
     cacheDuration: 5 * 60 * 1000,
   }),
 
@@ -36,6 +27,13 @@ export default {
       state.settings?.ordersAutoRefreshEnabled ?? true,
     ordersAutoRefreshSeconds: (state) =>
       state.settings?.ordersAutoRefreshSeconds ?? 15,
+
+    // Branch info
+    branchName: (state) => state.settings?.name || "",
+    branchCode: (state) => state.settings?.code || "",
+    branchCountry: (state) => state.settings?.country || "",
+    branchCurrency: (state) => state.settings?.currency || "TRY",
+    branchTimezone: (state) => state.settings?.timezone || "Europe/Istanbul",
 
     // Check if settings are loaded
     isLoaded: (state) => state.settings !== null,
@@ -104,11 +102,20 @@ export default {
       commit("SET_ERROR", null);
 
       try {
-        const res = await api.get(`/branches/${branchId}`);
-        const settings = res.data;
+        // ✅ Fetch all branches, then find current one
+        const res = await api.get(`/branches`, {
+          params: { branchId },
+        });
 
-        commit("SET_SETTINGS", settings);
-        return settings;
+        const branches = res.data || [];
+        const currentBranch = branches.find((b) => b.id === branchId);
+
+        if (!currentBranch) {
+          throw new Error(`Branch ${branchId} not found`);
+        }
+
+        commit("SET_SETTINGS", currentBranch);
+        return currentBranch;
       } catch (err) {
         const errorMsg =
           err.response?.data?.error || "Failed to load branch settings";
@@ -116,7 +123,7 @@ export default {
         console.error("❌ Failed to fetch branch settings:", err);
 
         // Return default settings on error
-        return {
+        const defaults = {
           menuDefaultStock: 20,
           menuDefaultPrice: 400,
           stockWarnEnabled: true,
@@ -126,6 +133,8 @@ export default {
           ordersAutoRefreshEnabled: true,
           ordersAutoRefreshSeconds: 15,
         };
+        commit("SET_SETTINGS", defaults);
+        return defaults;
       } finally {
         commit("SET_LOADING", false);
       }

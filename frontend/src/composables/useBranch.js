@@ -24,6 +24,33 @@ export function useBranch() {
     tableId.value ? `Masa ${tableId.value}` : "Masa bilgisi yok"
   );
 
+  const branchSettings = computed(
+    () => store.getters["branchSettings/settings"]
+  );
+  const menuDefaultStock = computed(
+    () => store.getters["branchSettings/menuDefaultStock"]
+  );
+  const menuDefaultPrice = computed(
+    () => store.getters["branchSettings/menuDefaultPrice"]
+  );
+  const stockWarnEnabled = computed(
+    () => store.getters["branchSettings/stockWarnEnabled"]
+  );
+  const stockWarnThreshold = computed(
+    () => store.getters["branchSettings/stockWarnThreshold"]
+  );
+  const ordersAutoRefreshEnabled = computed(
+    () => store.getters["branchSettings/ordersAutoRefreshEnabled"]
+  );
+  const ordersAutoRefreshSeconds = computed(
+    () => store.getters["branchSettings/ordersAutoRefreshSeconds"]
+  );
+
+  // Add fetch action
+  const fetchBranchSettings = async (force = false) => {
+    return await store.dispatch("branchSettings/fetchSettings", force);
+  };
+
   return {
     branchId,
     tableId,
@@ -31,5 +58,13 @@ export function useBranch() {
     setBranch,
     setTableId,
     getBranchId,
+    branchSettings,
+    menuDefaultStock,
+    menuDefaultPrice,
+    stockWarnEnabled,
+    stockWarnThreshold,
+    ordersAutoRefreshEnabled,
+    ordersAutoRefreshSeconds,
+    fetchBranchSettings,
   };
 }

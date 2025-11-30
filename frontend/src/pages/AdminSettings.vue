@@ -294,7 +294,7 @@ import api from "@/config/api";
 import { useGlobal } from "@/composables";
 import Icons from "@/components/Icons.vue";
 
-const { setBranch, getBranchId } = useGlobal();
+const { setBranch, getBranchId, fetchBranchSettings } = useGlobal();
 
 const branches = ref([]);
 const selectedBranchId = ref(null);
@@ -455,7 +455,7 @@ const saveBranchSettings = async () => {
     await api.post(`/branches/${id}/settings`, {
       ...branchSettings.value,
     });
-
+    await fetchBranchSettings(true);
     window.$toast?.("Şube ayarları kaydedildi!", "success");
   } catch (err) {
     console.error(

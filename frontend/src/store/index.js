@@ -1,6 +1,7 @@
 // frontend/src/store/index.js
 import { createStore } from "vuex";
 import basketModule from "./modules/basket";
+import branchSettingsModule from "./modules/branchSettings";
 import api from "@/config/api";
 const store = createStore({
   state: {
@@ -56,6 +57,7 @@ const store = createStore({
       state.token = "";
       state.role = "";
       state.user = null;
+      this.commit("branchSettings/CLEAR_SETTINGS");
       // ⚠️ DON'T clear branchId or tableId - keep them for QR session
 
       localStorage.removeItem("token");
@@ -111,6 +113,7 @@ const store = createStore({
 
   modules: {
     basket: basketModule,
+    branchSettings: branchSettingsModule,
   },
 });
 

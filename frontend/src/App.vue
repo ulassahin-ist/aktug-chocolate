@@ -50,5 +50,7 @@ onMounted(async () => {
       "warning"
     );
   }
+
+  await fetchBranchSettings();
 });
 </script>

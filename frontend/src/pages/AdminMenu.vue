@@ -200,7 +200,7 @@ import api, { API_BASE } from "@/config/api";
 import { useGlobal } from "@/composables";
 import Icons from "@/components/Icons.vue";
 
-const { getBranchId } = useGlobal();
+const { getBranchId, menuDefaultStock, menuDefaultPrice } = useGlobal();
 
 const items = ref([]);
 const categories = ref([]);
@@ -284,8 +284,8 @@ const addNewItem = async () => {
       name: "Yeni Ürün",
       description: "Açıklama",
       categoryId,
-      price: 400,
-      stock: 20,
+      price: menuDefaultPrice.value,
+      stock: menuDefaultStock.value,
       available: true,
     });
 

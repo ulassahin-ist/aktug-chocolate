@@ -84,7 +84,13 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import api from "@/config/api";
 import { useGlobal } from "@/composables";
 
-const { getBranchId, formatPrice, formatDate } = useGlobal();
+const {
+  getBranchId,
+  formatPrice,
+  formatDate,
+  ordersAutoRefreshEnabled,
+  ordersAutoRefreshSeconds,
+} = useGlobal();
 
 const orders = ref([]);
 const loading = ref(false);
@@ -143,11 +149,13 @@ onMounted(() => {
   fetchOrders(false);
 
   // 🕒 Poll every 7 seconds while tab is visible
-  pollTimer = setInterval(() => {
-    if (document.visibilityState === "visible") {
-      fetchOrders(true); // silent
-    }
-  }, 30000);
+  if (ordersAutoRefreshEnabled.value) {
+    pollTimer = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchOrders(true);
+      }
+    }, ordersAutoRefreshSeconds.value * 1000);
+  }
 });
 
 onBeforeUnmount(() => {
