@@ -128,7 +128,7 @@
           <button
             class="btn-secondary btn-sm"
             @click="saveBranchSettings"
-            :disabled="savingBranchSettings"
+            :disabled="savingBranchSettings || !settingsChanged"
           >
             {{ savingBranchSettings ? "Kaydediliyor..." : "Ayarları Kaydet" }}
           </button>
@@ -319,6 +319,7 @@ const branchSettings = ref({
   ordersAutoRefreshSeconds: 15,
 });
 
+const originalBranchSettings = ref(null);
 const savingBranchSettings = ref(false);
 
 const currentBranch = computed(() =>
@@ -337,7 +338,8 @@ watch(
   currentBranch,
   (b) => {
     if (!b) return;
-    branchSettings.value = {
+
+    const base = {
       menuDefaultStock: b.menuDefaultStock ?? 20,
       menuDefaultPrice: Number(b.menuDefaultPrice ?? 400),
       stockWarnEnabled: !!b.stockWarnEnabled,
@@ -347,6 +349,9 @@ watch(
       ordersAutoRefreshEnabled: !!b.ordersAutoRefreshEnabled,
       ordersAutoRefreshSeconds: b.ordersAutoRefreshSeconds ?? 15,
     };
+
+    branchSettings.value = { ...base };
+    originalBranchSettings.value = { ...base }; // 🔹 reset “clean” snapshot
   },
   { immediate: true }
 );
@@ -444,6 +449,23 @@ const saveCategoryOrder = async () => {
     saving.value = false;
   }
 };
+const settingsChanged = computed(() => {
+  if (!originalBranchSettings.value) return false;
+
+  const a = branchSettings.value;
+  const b = originalBranchSettings.value;
+
+  return (
+    a.menuDefaultStock !== b.menuDefaultStock ||
+    Number(a.menuDefaultPrice) !== Number(b.menuDefaultPrice) ||
+    !!a.stockWarnEnabled !== !!b.stockWarnEnabled ||
+    a.stockWarnThreshold !== b.stockWarnThreshold ||
+    !!a.showInactiveMenuItems !== !!b.showInactiveMenuItems ||
+    !!a.showOutOfStockItems !== !!b.showOutOfStockItems ||
+    !!a.ordersAutoRefreshEnabled !== !!b.ordersAutoRefreshEnabled ||
+    Number(a.ordersAutoRefreshSeconds) !== Number(b.ordersAutoRefreshSeconds)
+  );
+});
 
 const saveBranchSettings = async () => {
   try {
@@ -455,7 +477,12 @@ const saveBranchSettings = async () => {
     await api.post(`/branches/${id}/settings`, {
       ...branchSettings.value,
     });
+
     await fetchBranchSettings(true);
+
+    // 🔹 current values are now the saved baseline
+    originalBranchSettings.value = { ...branchSettings.value };
+
     window.$toast?.("Şube ayarları kaydedildi!", "success");
   } catch (err) {
     console.error(

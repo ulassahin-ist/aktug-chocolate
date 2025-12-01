@@ -1,7 +1,11 @@
 // utils/emailService.js
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-
+console.log("BREVO_SMTP_USER:", process.env.BREVO_SMTP_USER);
+console.log(
+  "BREVO_SMTP_PASS length:",
+  process.env.BREVO_SMTP_PASS ? process.env.BREVO_SMTP_PASS.length : "MISSING"
+);
 const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
